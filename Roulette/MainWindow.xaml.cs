@@ -21,11 +21,15 @@ namespace Roulette
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Make it possible to access GameLogic.cs
+        private readonly GameLogic game;
+
         public MainWindow()
         {
             InitializeComponent();
             //Disbable number input field as long as the checkbox isn't ticked
             numberChoiceBox.Focusable = false;
+            game = new GameLogic();
             //You can hover over the position with your mouse but it doesn't get highlighted
             InputCorrector.Visibility = Visibility.Hidden;                          
         }
@@ -43,8 +47,8 @@ namespace Roulette
                 if (value < 0 || value > 36)
                 {
                     InputCorrector.Visibility = Visibility.Visible;
-                    InputCorrector.Text = ("Only numbers from 0 to 36 allowed!");
-                    numberChoiceBox.Text = ("");
+                    InputCorrector.Text = "Only numbers from 0 to 36 allowed!";
+                    numberChoiceBox.Text = "";
                 }
             }
         }
@@ -63,7 +67,7 @@ namespace Roulette
                     //If not every char is a digit, cancel the paste and send an error message
                     e.CancelCommand();
                     InputCorrector.Visibility = Visibility.Visible;
-                    InputCorrector.Text = ("You have to paste numbers ranging from 0 to 36!");
+                    InputCorrector.Text = "You have to paste numbers ranging from 0 to 36!";
                 }
             }
             //If the paste content isnt a string, cancel the paste immediately
@@ -82,7 +86,7 @@ namespace Roulette
             {
                 //If e.Handled is true (user doesnt only write digits), show an error message
                 InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = ("You can only enter numbers!");
+                InputCorrector.Text = "You can only enter numbers!";
             }
             else
             { 
@@ -93,11 +97,12 @@ namespace Roulette
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
-        { 
-            InputCorrector.Text = ("");
+        {
+            InputCorrector.Text = "";
             //Create all important variables for the upcoming codeblock
             var ColorChoice = "empty";
-            var PlayerNumber = numberChoiceBox.Text;
+            var PlayerNumber = (numberChoiceBox.Text);
+            int.TryParse(PlayerNumber, out int PlayerNum);
             bool ColorGame = false;
 
 
@@ -110,7 +115,7 @@ namespace Roulette
             else if (colorGreen.IsChecked == true)
             {
                 ColorChoice = "green";
-                ColorGame = true;                
+                ColorGame = true;
             }
             else if (colorBlack.IsChecked == true)
             {
@@ -118,36 +123,40 @@ namespace Roulette
                 ColorGame = true;
             }
 
+            GameLoop(ColorGame, ColorChoice, PlayerNum);
+        }
+        
+        private void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber)
+        {
             //Call the WinGenerator method to generate a number and color
-            var result = WinGenerator(ColorGame);
-            string WinningNumber = result.Number.ToString();
+            var result = game.WinGenerator();
             //If the user chose a color to play with, evaluate if he got the correct color or not
-            if (ColorGame == true)
+            if (ColorGame)
             {
-                if (ColorChoice == result.Color)
+                if (game.CheckColorWin(ColorChoice, result.Color))
                 {
-                    choiceAnnounce.Text = ($"You win! You picked the color {ColorChoice}, " +
-                        $"the color {result.Color} got rolled with the number {result.Number}");
-                }
-                else if (ColorChoice != result.Color)
-                {
-                    choiceAnnounce.Text = ($"Unlucky, you lose! You picked the color {ColorChoice}, " +
-                        $"the color {result.Color} got rolled with the number {result.Number}");
-                }
-            }
-            
-            //If the user chose a number to play with, evaluate if he got the correct number or not
-            else
-            {
-                if (PlayerNumber == WinningNumber)
-                { 
-                    choiceAnnounce.Text = ($"You win! You picked the number {PlayerNumber}, " +
-                        $"the number {WinningNumber} got rolled with the color {result.Color}");
+                    choiceAnnounce.Text = $"You win! You picked the color {ColorChoice}, " +
+                        $"the color {result.Color} got rolled with the number {result.Number}";
                 }
                 else
                 {
-                    choiceAnnounce.Text = ($"Unlucky, you lose! You picked the number {PlayerNumber}, " +
-                        $"the number {WinningNumber} got rolled with the color {result.Color}");
+                    choiceAnnounce.Text = $"Unlucky, you lose! You picked the color {ColorChoice}, " +
+                        $"the color {result.Color} got rolled with the number {result.Number}";
+                }
+            }
+           
+            //If the user chose a number to play with, evaluate if he got the correct number or not
+            else
+            {
+                if (game.CheckNumberWin(PlayerNumber, result.Number))
+                { 
+                    choiceAnnounce.Text = $"You win! You picked the number {PlayerNumber}, " +
+                        $"the number {result.Number} got rolled with the color {result.Color}";
+                }
+                else
+                {
+                    choiceAnnounce.Text = $"Unlucky, you lose! You picked the number {PlayerNumber}, " +
+                        $"the number {result.Number} got rolled with the color {result.Color}";
                 }
             }
         }
@@ -169,7 +178,7 @@ namespace Roulette
         //Tickbox behaviour for the number betting
         private void numberBetting_Unchecked(object sender, RoutedEventArgs e)
         {
-            InputCorrector.Text = ("");
+            InputCorrector.Text = "";
             InputCorrector.Visibility = Visibility.Hidden;
             numberChoiceBox.Focusable = false;
             colorRed.IsEnabled = true;
@@ -204,33 +213,5 @@ namespace Roulette
             colorGreen.IsChecked = false;
         }
 
-        //Generate the win number and the win color
-        public static (int Number, string Color) WinGenerator(bool ColorGame)
-        {
-            //All numbers from the real roulette table that are paired with the color black
-            int[] WinColorBlack = new int[] { 15, 4, 2, 17, 6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26 };
-
-            //Random number gen
-            Random random = new Random();
-            int WinningNumber = random.Next(0, 37);
-            string WinningColor = "empty";
-
-            //Choose the win color based on the generated number
-            if (WinningNumber == 0)
-            {
-                WinningColor = "green";
-            }
-            else if (WinColorBlack.Contains(WinningNumber))
-            {
-                WinningColor = "black";
-            }
-            else
-            {
-                WinningColor = "red";
-            }
-            return (WinningNumber, WinningColor);
-        }
-
-
-    } //NUMBERS 0-36
+    }
 }
