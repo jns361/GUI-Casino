@@ -24,13 +24,14 @@ namespace Roulette
         //Make it possible to access GameLogic.cs
         private readonly GameLogic game;
         private readonly ChipManagement chips;
-
+        
         public MainWindow()
         {
             InitializeComponent();
             //Disbable number input field as long as the checkbox isn't ticked
             numberChoiceBox.Focusable = false;
             game = new GameLogic();
+            chips = new ChipManagement(game, this);
             //You can hover over the position with your mouse but it doesn't get highlighted
             InputCorrector.Visibility = Visibility.Hidden;                          
         }
@@ -51,6 +52,31 @@ namespace Roulette
                     InputCorrector.Text = "Only numbers from 0 to 36 allowed!";
                     numberChoiceBox.Text = "";
                 }
+            }
+        }
+
+        private void TextBoxChips_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Check if entered bet amount is a valid integer
+            if (int.TryParse(BetAmountInput.Text, out int value))
+            {
+                int chipAmount = chips.GetChipAmount();
+                if (value > chipAmount)
+                {
+                    InputCorrector.Visibility = Visibility.Visible;
+                    InputCorrector.Text = "Your bet can't be higher then your total chips!";
+                    BetAmountInput.Text = "";
+                }
+                else if (value < 1)
+                {
+                    InputCorrector.Visibility = Visibility.Visible;
+                    InputCorrector.Text = "Your bet has to be at least 1!";
+                    BetAmountInput.Text = "";
+                }
+               /* else
+                {
+                    int BetAmount = BetAmountInput.Text;
+                }*/
             }
         }
 
@@ -97,6 +123,8 @@ namespace Roulette
             
         }
 
+        public bool ColorGame;
+        //public int BetAmount;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             InputCorrector.Text = "";
@@ -104,7 +132,7 @@ namespace Roulette
             var ColorChoice = "empty";
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
-            bool ColorGame = false;
+            ColorGame = false;
 
             //Check what color got chosen and set the ColorChoice variable to it
             if (colorRed.IsChecked == true)
@@ -124,6 +152,19 @@ namespace Roulette
             }
 
             GameLoop(ColorGame, ColorChoice, PlayerNum);
+            GetBetType();
+        }
+
+        public bool GetBetType()
+        {
+            return ColorGame;
+        }
+
+        public int GetBetAmound()
+        {
+            var BetAmount = (BetAmountInput.Text);
+            int.TryParse(BetAmount, out int IntBetAmount);
+            return IntBetAmount;
         }
         
         private void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber)

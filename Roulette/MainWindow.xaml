@@ -11,49 +11,45 @@
         Loaded="Window_Loaded">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="201*"/>
-            <RowDefinition Height="91*"/>
-        </Grid.RowDefinitions>
         <TextBox x:Name="numberChoiceBox" 
                  PreviewTextInput="CheckForLetters"
                  HorizontalAlignment="Center" 
-                 Margin="0,59,0,0" 
+                 Margin="0,439,0,0" 
                  TextWrapping="Wrap" 
                  VerticalAlignment="Top" 
                  Width="120" 
                  TextChanged="TextBox_TextChanged" 
                  SelectionOpacity="0.2" 
                  AllowDrop="False" 
-                 Background="#FFCAC6C6" Grid.Row="1"/>
+                 Background="#FFCAC6C6"/>
         <Button x:Name="submitButton" 
                 Content="Submit" 
                 HorizontalAlignment="Center" 
-                Margin="0,84,0,0" 
+                Margin="0,464,0,0" 
                 VerticalAlignment="Top" 
-                Click="Button_Click" Grid.Row="1"/>
+                Click="Button_Click"/>
         <CheckBox Content="Bet on Number" 
                   HorizontalAlignment="Center" 
-                  Margin="0,34,0,0" 
+                  Margin="0,414,0,0" 
                   VerticalAlignment="Top" 
                   Checked="numberBetting_Checked" 
-                  Unchecked="numberBetting_Unchecked" Grid.Row="1"/>
+                  Unchecked="numberBetting_Unchecked"/>
         <RadioButton x:Name="colorRed"
                      Content="Red" 
                      HorizontalAlignment="Left" 
-                     Margin="65,383,0,0" 
+                     Margin="65,380,0,0" 
                      VerticalAlignment="Top" 
                      Checked="colorRed_Checked"/>
         <RadioButton x:Name="colorGreen" 
                      Content="Green" 
                      HorizontalAlignment="Center" 
-                     Margin="0,383,0,0" 
+                     Margin="0,380,0,0" 
                      VerticalAlignment="Top"
                      Checked="colorGreen_Checked"/>
         <RadioButton x:Name="colorBlack"
                      Content="Black" 
                      HorizontalAlignment="Left" 
-                     Margin="405,383,0,0" 
+                     Margin="405,380,0,0" 
                      VerticalAlignment="Top"
                      Checked="colorBlack_Checked"/>
         <TextBlock x:Name="choiceAnnounce"
@@ -62,21 +58,24 @@
                    TextWrapping="Wrap" 
                    Text="Enter your amount of chips in the beige box!" 
                    FontSize="18"
-                   VerticalAlignment="Top"/>
+                   VerticalAlignment="Top"
+                   TextAlignment="Center"
+                   Width="361"/>
         <TextBox x:Name="InputCorrector"
                  HorizontalAlignment="Center" 
-                 Margin="0,125,0,0" 
+                 Margin="0,489,0,0" 
                  TextWrapping="Wrap" 
                  Text="" 
+                 TextAlignment="Center"
                  VerticalAlignment="Top" 
-                 Width="120"
+                 Width="225"
                  FontFamily="72 Black" 
                  BorderBrush="White" 
                  Foreground="#FFB90000" 
                  AllowDrop="False" 
                  Focusable="False" 
                  Cursor="No" 
-                 SelectionBrush="White" Grid.Row="1"/>
+                 SelectionBrush="White"/>
         <TextBox x:Name="chipDisplay"
                  HorizontalAlignment="Left" 
                  Margin="405,22,0,0" 
@@ -84,18 +83,21 @@
                  Text="TextBox" 
                  VerticalAlignment="Top" 
                  Width="120"
-                 FontSize="15"/>
+                 FontSize="13" 
+                 Cursor="No"
+                 BorderThickness="0"
+                 IsReadOnly="True" Focusable="False"/>
         <TextBox x:Name="BetAmountInput" 
-            PreviewTextInput="CheckForLetters"
-            HorizontalAlignment="Center" 
-            TextWrapping="Wrap" 
-            VerticalAlignment="Top" 
-            Width="50" 
-            TextChanged="TextBox_TextChanged" 
-            SelectionOpacity="0.2" 
-            AllowDrop="False" 
-            Background="Beige" 
-            Cursor="Hand"
-            Margin="0,342,0,0"/>
+                 PreviewTextInput="CheckForLetters"
+                 HorizontalAlignment="Center" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="50" 
+                 TextChanged="TextBoxChips_TextChanged" 
+                 SelectionOpacity="0.2" 
+                 AllowDrop="False" 
+                 Background="Beige" 
+                 Cursor="Hand"
+                 Margin="0,341,0,0"/>
     </Grid>
 </Window>
