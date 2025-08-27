@@ -24,8 +24,10 @@ namespace Roulette
         public MainWindow()
         {
             InitializeComponent();
-            numberChoiceBox.Focusable = false;                                      //Deaktivierung des Zahleneingabefelds solange die Checkbox nicht gewählt ist
-            InputCorrector.Visibility = Visibility.Hidden;                          //Dass man mit der Maus zwar drüberhovert, aber keine Outlines sieht
+            //Disbable number input field as long as the checkbox isn't ticked
+            numberChoiceBox.Focusable = false;
+            //You can hover over the position with your mouse but it doesn't get highlighted
+            InputCorrector.Visibility = Visibility.Hidden;                          
         }
         private void Window_Loaded(object sender,RoutedEventArgs e)
         {
@@ -34,12 +36,14 @@ namespace Roulette
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (int.TryParse(numberChoiceBox.Text, out int value))
+            //Check if input is a valid integer
+            if (int.TryParse(numberChoiceBox.Text, out int value))                 
             {
+                //Verify it's something from 0 to 36
                 if (value < 0 || value > 36)
                 {
                     InputCorrector.Visibility = Visibility.Visible;
-                    InputCorrector.Text = ("Only numbers from 0 - 36 allowed!");
+                    InputCorrector.Text = ("Only numbers from 0 to 36 allowed!");
                     numberChoiceBox.Text = ("");
                 }
             }
@@ -47,17 +51,22 @@ namespace Roulette
 
         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
+            //Check if pasted content is a string
             if(e.DataObject.GetDataPresent(typeof(string))) 
             {
+                //Get the pasted content as string variable
                 string pasteText = (string)e.DataObject.GetData(typeof(string));
 
+                //Check if all chars of the paste are digits
                 if (!pasteText.All(char.IsDigit))
                 {
+                    //If not every char is a digit, cancel the paste and send an error message
                     e.CancelCommand();
                     InputCorrector.Visibility = Visibility.Visible;
-                    InputCorrector.Text = ("You have to paste numbers ranging from 0 - 36!");
+                    InputCorrector.Text = ("You have to paste numbers ranging from 0 to 36!");
                 }
             }
+            //If the paste content isnt a string, cancel the paste immediately
             else
             {
                 e.CancelCommand();
@@ -66,30 +75,33 @@ namespace Roulette
 
         private void CheckForLetters(object sender, TextCompositionEventArgs e)
         {
+            //Check if user wants to write letters instead of digits
             e.Handled = !e.Text.All(char.IsDigit);
 
             if (e.Handled)
             {
+                //If e.Handled is true (user doesnt only write digits), show an error message
                 InputCorrector.Visibility = Visibility.Visible;
                 InputCorrector.Text = ("You can only enter numbers!");
             }
             else
-            {
+            { 
                 InputCorrector.Visibility = Visibility.Hidden;
-                InputCorrector.Text = ("");
+                InputCorrector.Text = "";
             }
-            //e.Handled = !e.Text.All(char.IsDigit);                                  //Nur Zahlen zulassen!
+            
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)                 //Übergabe des vom Spieler gewünschten Werts in Variablen
-        {                                                                           //Entweder Farbe oder Zahl
+        private void Button_Click(object sender, RoutedEventArgs e)
+        { 
             InputCorrector.Text = ("");
+            //Create all important variables for the upcoming codeblock
             var ColorChoice = "empty";
             var PlayerNumber = numberChoiceBox.Text;
             bool ColorGame = false;
 
 
-
+            //Check what color got chosen and set the ColorChoice variable to it
             if (colorRed.IsChecked == true)
             {
                 ColorChoice = "red";
@@ -105,18 +117,11 @@ namespace Roulette
                 ColorChoice = "black";
                 ColorGame = true;
             }
-            /*
-            if (ColorGame == false)                                                 //Wird mit einer Zahl gespielt oder einer Farbe?
-            {
-                choiceAnnounce.Text = ($"Your choice is {PlayerNumber}; glhf");
-            }
-            else
-            {
-                choiceAnnounce.Text = ($"Your choice is {ColorChoice}; glhf");
-            }*/
 
+            //Call the WinGenerator method to generate a number and color
             var result = WinGenerator(ColorGame);
             string WinningNumber = result.Number.ToString();
+            //If the user chose a color to play with, evaluate if he got the correct color or not
             if (ColorGame == true)
             {
                 if (ColorChoice == result.Color)
@@ -131,10 +136,11 @@ namespace Roulette
                 }
             }
             
+            //If the user chose a number to play with, evaluate if he got the correct number or not
             else
             {
                 if (PlayerNumber == WinningNumber)
-                { //result number umwandeln!!
+                { 
                     choiceAnnounce.Text = ($"You win! You picked the number {PlayerNumber}, " +
                         $"the number {WinningNumber} got rolled with the color {result.Color}");
                 }
@@ -146,6 +152,7 @@ namespace Roulette
             }
         }
 
+        //Tickbox behaviour for the number betting
         private void numberBetting_Checked(object sender, RoutedEventArgs e)
         {
             numberChoiceBox.Focusable = true;
@@ -159,6 +166,7 @@ namespace Roulette
             numberChoiceBox.Background = Brushes.White;
         }
 
+        //Tickbox behaviour for the number betting
         private void numberBetting_Unchecked(object sender, RoutedEventArgs e)
         {
             InputCorrector.Text = ("");
@@ -175,32 +183,39 @@ namespace Roulette
             numberChoiceBox.Background = (Brush)new BrushConverter().ConvertFromString("#FFCAC6C6");
         }
 
-
+        //Checkbox behavior for the color red checkbox
         private void colorRed_Checked(object sender, RoutedEventArgs e)
         {
             colorGreen.IsChecked = false;
             colorBlack.IsChecked = false;
         }
- 
+
+        //Checkbox behavior for the color green checkbox
         private void colorGreen_Checked(object sender, RoutedEventArgs e)
         {
             colorRed.IsChecked = false;
             colorBlack.IsChecked = false;
         }
+
+        //Checkbox behavior for the color black checkbox
         private void colorBlack_Checked(object sender, RoutedEventArgs e)
         {
             colorRed.IsChecked = false;
             colorGreen.IsChecked = false;
         }
 
+        //Generate the win number and the win color
         public static (int Number, string Color) WinGenerator(bool ColorGame)
         {
+            //All numbers from the real roulette table that are paired with the color black
             int[] WinColorBlack = new int[] { 15, 4, 2, 17, 6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26 };
 
+            //Random number gen
             Random random = new Random();
             int WinningNumber = random.Next(0, 37);
             string WinningColor = "empty";
 
+            //Choose the win color based on the generated number
             if (WinningNumber == 0)
             {
                 WinningColor = "green";
