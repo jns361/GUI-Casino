@@ -105,7 +105,6 @@ namespace Roulette
             int.TryParse(PlayerNumber, out int PlayerNum);
             bool ColorGame = false;
 
-
             //Check what color got chosen and set the ColorChoice variable to it
             if (colorRed.IsChecked == true)
             {
@@ -212,6 +211,5 @@ namespace Roulette
             colorRed.IsChecked = false;
             colorGreen.IsChecked = false;
         }
-
     }
 }
