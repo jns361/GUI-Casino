@@ -23,6 +23,7 @@ namespace Roulette
     {
         //Make it possible to access GameLogic.cs
         private readonly GameLogic game;
+        private readonly ChipManagement chips;
 
         public MainWindow()
         {
@@ -132,6 +133,7 @@ namespace Roulette
             //If the user chose a color to play with, evaluate if he got the correct color or not
             if (ColorGame)
             {
+                //Hier chips iwie machen lol
                 if (game.CheckColorWin(ColorChoice, result.Color))
                 {
                     choiceAnnounce.Text = $"You win! You picked the color {ColorChoice}, " +
