@@ -11,23 +11,7 @@
         Loaded="Window_Loaded" Cursor="">
     <Viewbox>
         <Grid Margin="0,0,0,0">
-            <!--<Grid HorizontalAlignment="Center" Width="300" Margin="0, 380, 0, 20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions> -->
-
-            <!--<Grid HorizontalAlignment="Center" Width="300" Margin="0, 380, 0, 20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions> -->
+            
             <Image x:Name="chipAnimation" 
                           Width="38" Height="38" 
                           Source="pack://application:,,,/Roulette;component/Visuals/chip.gif" 
