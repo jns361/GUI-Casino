@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAnimatedGif;
 
 namespace Roulette
 {
@@ -24,6 +25,7 @@ namespace Roulette
         //Make it possible to access GameLogic.cs
         private readonly GameLogic game;
         private readonly ChipManagement chips;
+        public int playerBetAmount;
         
         public MainWindow()
         {
@@ -33,7 +35,15 @@ namespace Roulette
             game = new GameLogic();
             chips = new ChipManagement(game, this);
             //You can hover over the position with your mouse but it doesn't get highlighted
-            InputCorrector.Visibility = Visibility.Hidden;                          
+            InputCorrector.Visibility = Visibility.Hidden;
+
+            var imageUri = new Uri("pack://application:,,,/Roulette;component/Visuals/chip.gif", UriKind.Absolute);
+            var image = new BitmapImage(imageUri);
+
+            ImageBehavior.SetAnimatedSource(chipAnimation, image);
+            ImageBehavior.SetRepeatBehavior(chipAnimation, System.Windows.Media.Animation.RepeatBehavior.Forever);
+
+            ImageBehavior.SetAnimationSpeedRatio(chipAnimation, 1.5);
         }
         private void Window_Loaded(object sender,RoutedEventArgs e)
         {
@@ -73,12 +83,16 @@ namespace Roulette
                     InputCorrector.Text = "Your bet has to be at least 1!";
                     BetAmountInput.Text = "";
                 }
-               /* else
+                else
                 {
-                    int BetAmount = BetAmountInput.Text;
-                }*/
+                    playerBetAmount = value;
+                }
+                //chipAmount = chipAmount - value;
+                //GetBetAmount(value);
+
             }
         }
+        
 
         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
@@ -130,6 +144,8 @@ namespace Roulette
             InputCorrector.Text = "";
             //Create all important variables for the upcoming codeblock
             var ColorChoice = "empty";
+            var chipFund= (BetAmountInput.Text);
+            int.TryParse(chipFund, out int chipFunds);
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
             ColorGame = false;
@@ -151,8 +167,9 @@ namespace Roulette
                 ColorGame = true;
             }
 
-            GameLoop(ColorGame, ColorChoice, PlayerNum);
+            GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds, playerBetAmount);
             GetBetType();
+            //chips.SetChipAmount(chipAmount, PlayerNum);
         }
 
         public bool GetBetType()
@@ -160,15 +177,14 @@ namespace Roulette
             return ColorGame;
         }
 
-        public int GetBetAmound()
+        private void GetBetAmount(int betAmount)
         {
-            var BetAmount = (BetAmountInput.Text);
-            int.TryParse(BetAmount, out int IntBetAmount);
-            return IntBetAmount;
+            chips.GetBetAmount(betAmount);
         }
         
-        private void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber)
+        private void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds, int playerBetAmount)
         {
+            bool gameWin;
             //Call the WinGenerator method to generate a number and color
             var result = game.WinGenerator();
             //If the user chose a color to play with, evaluate if he got the correct color or not
@@ -179,11 +195,13 @@ namespace Roulette
                 {
                     choiceAnnounce.Text = $"You win! You picked the color {ColorChoice}, " +
                         $"the color {result.Color} got rolled with the number {result.Number}";
+                    gameWin = true;
                 }
                 else
                 {
                     choiceAnnounce.Text = $"Unlucky, you lose! You picked the color {ColorChoice}, " +
                         $"the color {result.Color} got rolled with the number {result.Number}";
+                    gameWin = false;
                 }
             }
            
@@ -194,13 +212,16 @@ namespace Roulette
                 { 
                     choiceAnnounce.Text = $"You win! You picked the number {PlayerNumber}, " +
                         $"the number {result.Number} got rolled with the color {result.Color}";
+                    gameWin = true;
                 }
                 else
                 {
                     choiceAnnounce.Text = $"Unlucky, you lose! You picked the number {PlayerNumber}, " +
                         $"the number {result.Number} got rolled with the color {result.Color}";
+                    gameWin = false;
                 }
             }
+            chips.SetChipAmount(gameWin, chipFunds, PlayerNumber, ColorChoice);
         }
 
         //Tickbox behaviour for the number betting
@@ -229,7 +250,7 @@ namespace Roulette
             colorRed.Focusable = true;
             colorBlack.Focusable = true;
             colorGreen.Focusable = true;
-
+            
             numberChoiceBox.Clear();
             numberChoiceBox.Background = (Brush)new BrushConverter().ConvertFromString("#FFCAC6C6");
         }

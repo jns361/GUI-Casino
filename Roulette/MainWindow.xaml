@@ -6,98 +6,132 @@
         xmlns:local="clr-namespace:Roulette" 
         mc:Ignorable="d" 
         Title="Roulette" 
-        Height="600" 
-        Width="550"
-        Loaded="Window_Loaded">
+        Height="650" 
+        Width="570"
+        Loaded="Window_Loaded" Cursor="">
+    <Viewbox>
+        <Grid Margin="0,0,0,0">
+            <!--<Grid HorizontalAlignment="Center" Width="300" Margin="0, 380, 0, 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions> -->
 
-    <Grid>
-        <TextBox x:Name="numberChoiceBox" 
-                 PreviewTextInput="CheckForLetters"
-                 HorizontalAlignment="Center" 
-                 Margin="0,439,0,0" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Top" 
-                 Width="120" 
-                 TextChanged="TextBox_TextChanged" 
-                 SelectionOpacity="0.2" 
-                 AllowDrop="False" 
-                 Background="#FFCAC6C6"/>
-        <Button x:Name="submitButton" 
-                Content="Submit" 
-                HorizontalAlignment="Center" 
-                Margin="0,464,0,0" 
-                VerticalAlignment="Top" 
-                Click="Button_Click"/>
-        <CheckBox Content="Bet on Number" 
-                  HorizontalAlignment="Center" 
-                  Margin="0,414,0,0" 
-                  VerticalAlignment="Top" 
-                  Checked="numberBetting_Checked" 
-                  Unchecked="numberBetting_Unchecked"/>
-        <RadioButton x:Name="colorRed"
-                     Content="Red" 
-                     HorizontalAlignment="Left" 
-                     Margin="65,380,0,0" 
-                     VerticalAlignment="Top" 
-                     Checked="colorRed_Checked"/>
-        <RadioButton x:Name="colorGreen" 
-                     Content="Green" 
+            <!--<Grid HorizontalAlignment="Center" Width="300" Margin="0, 380, 0, 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions> -->
+            <Image x:Name="chipAnimation" 
+                          Width="38" Height="38" 
+                          Source="pack://application:,,,/Roulette;component/Visuals/chip.gif" 
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Top"
+                          Margin="0,15,70,0"
+                          />
+
+            <TextBox x:Name="chipDisplay" 
+                     Margin="0,21,3,0" 
+                     TextWrapping="Wrap"
+                     Text="100" 
+                     HorizontalAlignment="Right" VerticalAlignment="Top" 
+                     Width="62"
+                     FontSize="17" 
+                     Cursor="No"
+                     BorderThickness="0"
+                     IsReadOnly="True" Focusable="False"/>
+
+            <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="270" Margin="0,379,0,205">
+                <RadioButton x:Name="colorRed"
+                             Content="Red" 
+                             Canvas.Left="0" Canvas.Top="0"
+                             Checked="colorRed_Checked"/>
+                <RadioButton x:Name="colorGreen" 
+                             Content="Green" 
+                             Canvas.Left="110" Canvas.Top="0"
+                             Checked="colorGreen_Checked"/>
+                <RadioButton x:Name="colorBlack"
+                             Content="Black" 
+                             Canvas.Left="220" Canvas.Top="0"
+                             Checked="colorBlack_Checked"/>
+            </Canvas>
+
+            <TextBox x:Name="numberChoiceBox" 
+                     PreviewTextInput="CheckForLetters"
                      HorizontalAlignment="Center" 
-                     Margin="0,380,0,0" 
-                     VerticalAlignment="Top"
-                     Checked="colorGreen_Checked"/>
-        <RadioButton x:Name="colorBlack"
-                     Content="Black" 
-                     HorizontalAlignment="Left" 
-                     Margin="405,380,0,0" 
-                     VerticalAlignment="Top"
-                     Checked="colorBlack_Checked"/>
-        <TextBlock x:Name="choiceAnnounce"
-                   HorizontalAlignment="Center" 
-                   Margin="0,169,0,0" 
-                   TextWrapping="Wrap" 
-                   Text="Enter your amount of chips in the beige box!" 
-                   FontSize="18"
+                     Margin="0,439,0,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top" 
+                     Width="120" 
+                     TextChanged="TextBox_TextChanged" 
+                     SelectionOpacity="0.2" 
+                     AllowDrop="False" 
+                     Background="#FFCAC6C6"/>
+
+            <Button x:Name="submitButton" 
+                    Content="Submit" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,464,0,0" 
+                    VerticalAlignment="Top" 
+                    Click="Button_Click"/>
+
+            <CheckBox Content="Bet on Number" 
+                      HorizontalAlignment="Center" 
+                      Margin="0,414,0,0" 
+                      VerticalAlignment="Top" 
+                      Checked="numberBetting_Checked" 
+                      Unchecked="numberBetting_Unchecked"/>
+
+            <TextBlock x:Name="choiceAnnounce"
+                       HorizontalAlignment="Center" 
+                       Margin="0,169,0,0" 
+                       TextWrapping="Wrap" 
+                       Text="Enter your amount of chips in the beige box!" 
+                       FontSize="18"
+                       VerticalAlignment="Top"
+                       TextAlignment="Center"
+                       Width="361"/>
+
+            <TextBox x:Name="InputCorrector"
+                     HorizontalAlignment="Center" 
+                     Margin="0,489,0,0" 
+                     TextWrapping="Wrap" 
+                     Text="" 
+                     TextAlignment="Center"
+                     VerticalAlignment="Top" 
+                     Width="225"
+                     FontFamily="72 Black" 
+                     BorderBrush="White" 
+                     Foreground="#FFB90000" 
+                     AllowDrop="False" 
+                     Focusable="False" 
+                     Cursor="No" 
+                     SelectionBrush="White"/>
+
+            <TextBox x:Name="BetAmountInput" 
+                     PreviewTextInput="CheckForLetters"
+                     HorizontalAlignment="Center" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top" 
+                     Width="50" 
+                     TextChanged="TextBoxChips_TextChanged" 
+                     SelectionOpacity="0.2" 
+                     AllowDrop="False" 
+                     Background="Beige" 
+                     Cursor="Hand"
+                     Margin="0,341,0,0"/>
+            <Image x:Name="boxAroundChips"
+                   Width="79" Height="75"
+                   Source="pack://application:,,,/Roulette;component/Visuals/oval.png" 
+                   HorizontalAlignment="Right"
                    VerticalAlignment="Top"
-                   TextAlignment="Center"
-                   Width="361"/>
-        <TextBox x:Name="InputCorrector"
-                 HorizontalAlignment="Center" 
-                 Margin="0,489,0,0" 
-                 TextWrapping="Wrap" 
-                 Text="" 
-                 TextAlignment="Center"
-                 VerticalAlignment="Top" 
-                 Width="225"
-                 FontFamily="72 Black" 
-                 BorderBrush="White" 
-                 Foreground="#FFB90000" 
-                 AllowDrop="False" 
-                 Focusable="False" 
-                 Cursor="No" 
-                 SelectionBrush="White"/>
-        <TextBox x:Name="chipDisplay"
-                 HorizontalAlignment="Left" 
-                 Margin="405,22,0,0" 
-                 TextWrapping="Wrap"
-                 Text="TextBox" 
-                 VerticalAlignment="Top" 
-                 Width="120"
-                 FontSize="13" 
-                 Cursor="No"
-                 BorderThickness="0"
-                 IsReadOnly="True" Focusable="False"/>
-        <TextBox x:Name="BetAmountInput" 
-                 PreviewTextInput="CheckForLetters"
-                 HorizontalAlignment="Center" 
-                 TextWrapping="Wrap" 
-                 VerticalAlignment="Top" 
-                 Width="50" 
-                 TextChanged="TextBoxChips_TextChanged" 
-                 SelectionOpacity="0.2" 
-                 AllowDrop="False" 
-                 Background="Beige" 
-                 Cursor="Hand"
-                 Margin="0,341,0,0"/>
-    </Grid>
+                   Margin="0,0,29,0" />
+        </Grid>
+    </Viewbox>
 </Window>
