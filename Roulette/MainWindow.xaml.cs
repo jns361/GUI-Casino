@@ -30,10 +30,13 @@ namespace Roulette
         public MainWindow()
         {
             InitializeComponent();
-            //Disbable number input field as long as the checkbox isn't ticked
+            //Disable number input field as long as the checkbox isn't ticked
+            chips = new ChipManagement(game, this);
+            //chips.SaveChips(); Debug and testing line
             numberChoiceBox.Focusable = false;
             game = new GameLogic();
-            chips = new ChipManagement(game, this);
+            chipDisplay.Text = chips.chipAmount.ToString();
+            
             //You can hover over the position with your mouse but it doesn't get highlighted
             InputCorrector.Visibility = Visibility.Hidden;
 
@@ -169,6 +172,7 @@ namespace Roulette
 
             GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds, playerBetAmount);
             GetBetType();
+
             //chips.SetChipAmount(chipAmount, PlayerNum);
         }
 
@@ -222,6 +226,7 @@ namespace Roulette
                 }
             }
             chips.SetChipAmount(gameWin, chipFunds, PlayerNumber, ColorChoice);
+            chips.SaveChips();
         }
 
         //Tickbox behaviour for the number betting

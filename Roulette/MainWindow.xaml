@@ -23,7 +23,7 @@
             <TextBox x:Name="chipDisplay" 
                      Margin="0,21,3,0" 
                      TextWrapping="Wrap"
-                     Text="100" 
+                     
                      HorizontalAlignment="Right" VerticalAlignment="Top" 
                      Width="62"
                      FontSize="17" 
