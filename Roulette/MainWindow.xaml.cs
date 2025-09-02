@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
+using System.IO;
 
 namespace Roulette
 {
@@ -279,6 +280,24 @@ namespace Roulette
         {
             colorRed.IsChecked = false;
             colorGreen.IsChecked = false;
+        }
+
+        private void Button_Click_Reset(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            string savePath = chips.savePath;
+            Console.WriteLine(savePath);
+            using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
+            {
+                sw.Write("1000");
+                chipDisplay.Text = "1000";
+                chips.chipAmount = 1000;
+            }
+            Console.WriteLine("Reset successfull!");         
         }
     }
 }

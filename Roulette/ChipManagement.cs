@@ -4,10 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Security.AccessControl;
-using System.Security.Cryptography;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+
 
 namespace Roulette
 {
@@ -24,14 +21,8 @@ namespace Roulette
             "Roulette",
             "Savefile"
         );
-        private readonly string cdEncrypt = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Roulette",
-            "Savefile",
-            "Savefile.txt"
-        );
 
-        private readonly string savePath;
+        public readonly string savePath;
 
         public ChipManagement(GameLogic game, MainWindow interactions)
         {
@@ -118,8 +109,7 @@ namespace Roulette
         public void LoadChips()
         {   
             try
-            {
-               // File.Decrypt = @"cdEncrypt";
+            {;
                 if (File.Exists(savePath))
                 {
                     string content = File.ReadAllText(savePath);

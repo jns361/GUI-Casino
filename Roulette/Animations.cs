@@ -12,7 +12,7 @@ namespace Roulette
 {
     public static class Animations
     {
-        public static void PopOut(TextBox target, double scale = 1.2, int durationMs = 160)
+        public static void PopOut(TextBox target, double scale = 1.2, int durationMs = 145)
         {
             if (!(target.RenderTransform is ScaleTransform scaleTransform))
             {

@@ -11,25 +11,14 @@
         Loaded="Window_Loaded" Cursor="">
     <Viewbox>
         <Grid Margin="0,0,0,0">
-            
+
             <Image x:Name="chipAnimation" 
-                          Width="38" Height="38" 
+                          Width="49" Height="47" 
                           Source="pack://application:,,,/Roulette;component/Visuals/chip.gif" 
                           HorizontalAlignment="Right"
                           VerticalAlignment="Top"
-                          Margin="0,15,70,0"
+                          Margin="0,18,60,0"
                           />
-
-            <TextBox x:Name="chipDisplay" 
-                     Margin="0,21,3,0" 
-                     TextWrapping="Wrap"
-                     
-                     HorizontalAlignment="Right" VerticalAlignment="Top" 
-                     Width="62"
-                     FontSize="17" 
-                     Cursor="No"
-                     BorderThickness="0"
-                     IsReadOnly="True" Focusable="False"/>
 
             <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="270" Margin="0,379,0,205">
                 <RadioButton x:Name="colorRed"
@@ -111,11 +100,32 @@
                      Cursor="Hand"
                      Margin="0,341,0,0"/>
             <Image x:Name="boxAroundChips"
-                   Width="79" Height="75"
+                   Width="96" Height="91"
                    Source="pack://application:,,,/Roulette;component/Visuals/oval.png" 
                    HorizontalAlignment="Right"
                    VerticalAlignment="Top"
-                   Margin="0,0,29,0" />
+                   Margin="0,0,12,0"/>
+            <Button Content="RESET" 
+                    HorizontalAlignment="Left" 
+                    Margin="-98,605,0,0" 
+                    VerticalAlignment="Top" 
+                    Click="Button_Click_1" 
+                    Width="36" 
+                    Height="21"/>
+            <TextBox x:Name="chipDisplay" 
+                     Margin="0,30,8,0" 
+                     TextWrapping="Wrap"
+                     Text="1000"
+                     HorizontalAlignment="Right" VerticalAlignment="Top" 
+                     Width="62"
+                     FontSize="17" 
+                     Cursor="No"
+                     BorderThickness="0"
+                     IsReadOnly="True" Focusable="False">
+                <TextBox.Background>
+                    <SolidColorBrush Color="White" Opacity="0"/>
+                </TextBox.Background>
+            </TextBox>
         </Grid>
     </Viewbox>
 </Window>
