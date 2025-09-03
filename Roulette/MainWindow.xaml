@@ -109,11 +109,11 @@
                     HorizontalAlignment="Left" 
                     Margin="-98,605,0,0" 
                     VerticalAlignment="Top" 
-                    Click="Button_Click_1" 
+                    Click="ResetChips" 
                     Width="36" 
                     Height="21"/>
             <TextBox x:Name="chipDisplay" 
-                     Margin="0,30,8,0" 
+                     Margin="0,30,5,0" 
                      TextWrapping="Wrap"
                      Text="1000"
                      HorizontalAlignment="Right" VerticalAlignment="Top" 
@@ -121,7 +121,7 @@
                      FontSize="17" 
                      Cursor="No"
                      BorderThickness="0"
-                     IsReadOnly="True" Focusable="False">
+                     IsReadOnly="True" Focusable="False" TextChanged="chipDisplay_TextChanged">
                 <TextBox.Background>
                     <SolidColorBrush Color="White" Opacity="0"/>
                 </TextBox.Background>

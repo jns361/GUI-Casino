@@ -287,17 +287,43 @@ namespace Roulette
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ResetChips(object sender, RoutedEventArgs e)
         {
-            string savePath = chips.savePath;
-            Console.WriteLine(savePath);
-            using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
+            MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!", 
+                "Continue?",
+                MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
-                sw.Write("1000");
+                
+                string savePath = chips.savePath;
+                Console.WriteLine(savePath);
+                using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
+                {
+                    sw.Write("1000");                    
+                }
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
+                Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
+                    $" backend amount: {chips.chipAmount}");
+                MessageBox.Show("Reset successful!", "Reset successful!");
             }
-            Console.WriteLine("Reset successfull!");         
+                
+                
+            else
+            {
+                MessageBox.Show("Reset cancelled!", "Reset cancelled!");
+            }
+
+
+        /*string savePath = chips.savePath;
+        Console.WriteLine(savePath);
+        using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
+        {
+            sw.Write("1000");
+            chipDisplay.Text = "1000";
+            chips.chipAmount = 1000;
+        }
+        Console.WriteLine("Reset successful!");         */
         }
     }
 }
