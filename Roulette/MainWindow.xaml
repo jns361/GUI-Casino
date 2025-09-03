@@ -65,7 +65,7 @@
                        HorizontalAlignment="Center" 
                        Margin="0,169,0,0" 
                        TextWrapping="Wrap" 
-                       Text="Enter your amount of chips in the beige box!" 
+                       Text="Enter your desired stake in the beige box!" 
                        FontSize="18"
                        VerticalAlignment="Top"
                        TextAlignment="Center"
@@ -121,7 +121,7 @@
                      FontSize="17" 
                      Cursor="No"
                      BorderThickness="0"
-                     IsReadOnly="True" Focusable="False" TextChanged="chipDisplay_TextChanged">
+                     IsReadOnly="True" Focusable="False">
                 <TextBox.Background>
                     <SolidColorBrush Color="White" Opacity="0"/>
                 </TextBox.Background>

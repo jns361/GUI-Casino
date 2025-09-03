@@ -96,7 +96,6 @@ namespace Roulette
 
             }
         }
-        
 
         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
@@ -147,13 +146,23 @@ namespace Roulette
         {
             InputCorrector.Text = "";
             //Create all important variables for the upcoming codeblock
-            var ColorChoice = "empty";
+            string ColorChoice = "";
             var chipFund= (BetAmountInput.Text);
             int.TryParse(chipFund, out int chipFunds);
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
             ColorGame = false;
 
+            //Forbid to go below 0
+            int checkResult = chips.chipAmount - chipFunds;
+            if (checkResult < 0)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "You can't go below 0!";
+                BetAmountInput.Text = "";
+                return;
+            }
+            
             //Check what color got chosen and set the ColorChoice variable to it
             if (colorRed.IsChecked == true)
             {
@@ -173,8 +182,6 @@ namespace Roulette
 
             GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds, playerBetAmount);
             GetBetType();
-
-            //chips.SetChipAmount(chipAmount, PlayerNum);
         }
 
         public bool GetBetType()
@@ -187,7 +194,7 @@ namespace Roulette
             chips.GetBetAmount(betAmount);
         }
         
-        private void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds, int playerBetAmount)
+        public void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds, int playerBetAmount)
         {
             bool gameWin;
             //Call the WinGenerator method to generate a number and color
@@ -282,10 +289,6 @@ namespace Roulette
             colorGreen.IsChecked = false;
         }
 
-        private void Button_Click_Reset(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void ResetChips(object sender, RoutedEventArgs e)
         {
@@ -303,27 +306,26 @@ namespace Roulette
                 }
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
+                InputCorrector.Visibility = Visibility.Hidden;
+                choiceAnnounce.Text = "Enter your desired stake in the beige box!";
                 Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
                     $" backend amount: {chips.chipAmount}");
                 MessageBox.Show("Reset successful!", "Reset successful!");
-            }
                 
+            }   
                 
             else
             {
                 MessageBox.Show("Reset cancelled!", "Reset cancelled!");
             }
-
-
-        /*string savePath = chips.savePath;
-        Console.WriteLine(savePath);
-        using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
-        {
-            sw.Write("1000");
-            chipDisplay.Text = "1000";
-            chips.chipAmount = 1000;
         }
-        Console.WriteLine("Reset successful!");         */
+
+        public void NoChipsLeft()
+        {
+            InputCorrector.Visibility = Visibility.Visible;
+            InputCorrector.Text = "You have no chips left, please press RESET to try again!";
+            choiceAnnounce.Text = "Press 'RESET' to try again!";
+            BetAmountInput.Text = "";
         }
     }
 }

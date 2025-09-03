@@ -19,8 +19,7 @@ namespace Roulette
         {
             //Random number gen
             int winningNumber = random.Next(0, 37);
-            string winningColor = "";
-           
+            string winningColor = "";           
 
             //Choose the win color based on the generated number
             if (winningNumber == 0)
@@ -47,5 +46,6 @@ namespace Roulette
         {
             return playerNumber == winningNumber;
         }
+
     }
 }

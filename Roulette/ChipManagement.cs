@@ -11,7 +11,7 @@ namespace Roulette
     public class ChipManagement
     {        
         public readonly GameLogic game;
-        public readonly MainWindow interactions;
+        public MainWindow interactions;
 
         public int chipAmount;// = 100;
         
@@ -35,14 +35,14 @@ namespace Roulette
         }
         
         //set amount after bet + amount after win
-        public void SetChipAmount(bool gameWin, int betAmount, int PlayerNumber, string playerColor)               
+        public void SetChipAmount(bool gameWin, int betAmount, int PlayerNumber, string playerColor)
         {
+            int prizeForWin = 0;            
             chipAmount -= betAmount;
             interactions.chipDisplay.Text=chipAmount.ToString();
             Animations.PopOut(interactions.chipDisplay);
             //after color bet
             bool ColorGame = interactions.GetBetType();
-            int prizeForWin = 0;
             if (gameWin)
             { 
                 if (ColorGame)
@@ -65,7 +65,13 @@ namespace Roulette
             }
             else if (!gameWin)
             {
+                if (chipAmount == 0)
+                {
+                    interactions.NoChipsLeft();
+                }
                 prizeForWin = 0;
+                
+                return;
             }
         }
 
