@@ -7,12 +7,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <PackageIcon>rouletteTable.png</PackageIcon>
+    <ApplicationIcon>faviconProj.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Visuals\chip.gif" />
     <None Remove="Visuals\favicon%281%29.ico" />
     <None Remove="Visuals\oval.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="faviconProj.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -26,15 +26,15 @@
                 <RadioButton x:Name="colorRed"
                              Content="Red" 
                              Canvas.Left="0" Canvas.Top="0"
-                             Checked="colorRed_Checked"/>
+                             Checked="colorRed_Checked" IsTabStop="False" />
                 <RadioButton x:Name="colorGreen" 
                              Content="Green" 
                              Canvas.Left="110" Canvas.Top="0"
-                             Checked="colorGreen_Checked"/>
+                             Checked="colorGreen_Checked" IsTabStop="False"/>
                 <RadioButton x:Name="colorBlack"
                              Content="Black" 
                              Canvas.Left="220" Canvas.Top="0"
-                             Checked="colorBlack_Checked"/>
+                             Checked="colorBlack_Checked" IsTabStop="False" />
             </Canvas>
 
             <TextBox x:Name="numberChoiceBox" 
@@ -54,14 +54,14 @@
                     HorizontalAlignment="Center" 
                     Margin="0,464,0,0" 
                     VerticalAlignment="Top" 
-                    Click="Button_Click"/>
+                    Click="Button_Click" IsTabStop="False" />
 
             <CheckBox Content="Bet on Number" 
                       HorizontalAlignment="Center" 
                       Margin="0,414,0,0" 
                       VerticalAlignment="Top" 
                       Checked="numberBetting_Checked" 
-                      Unchecked="numberBetting_Unchecked"/>
+                      Unchecked="numberBetting_Unchecked" IsTabStop="False" />
 
             <TextBlock x:Name="choiceAnnounce"
                        HorizontalAlignment="Center" 
@@ -100,7 +100,7 @@
                      AllowDrop="False" 
                      Background="Beige" 
                      Cursor="Hand"
-                     Margin="0,341,0,0"/>
+                     Margin="0,341,0,0" IsTabStop="False"/>
             <Image x:Name="boxAroundChips"
                    Width="96" Height="91"
                    Source="Visuals/oval.png" 
@@ -113,7 +113,7 @@
                     VerticalAlignment="Top" 
                     Click="ResetChips" 
                     Width="36" 
-                    Height="21"/>
+                    Height="21" IsTabStop="False" />
             <TextBox x:Name="chipDisplay" 
                      Margin="0,30,5,0" 
                      TextWrapping="Wrap"
