@@ -41,8 +41,9 @@ namespace Roulette
             //You can hover over the position with your mouse but it doesn't get highlighted
             InputCorrector.Visibility = Visibility.Hidden;
 
-            var imageUri = new Uri("pack://application:,,,/Roulette;component/Visuals/chip.gif", UriKind.Absolute);
+            var imageUri = new Uri("pack://application:,,,/Visuals/chip.gif", UriKind.Absolute);
             var image = new BitmapImage(imageUri);
+
 
             ImageBehavior.SetAnimatedSource(chipAnimation, image);
             ImageBehavior.SetRepeatBehavior(chipAnimation, System.Windows.Media.Animation.RepeatBehavior.Forever);

@@ -8,13 +8,15 @@
         Title="Roulette" 
         Height="650" 
         Width="570"
-        Loaded="Window_Loaded" Cursor="">
+        Loaded="Window_Loaded" Cursor=""
+        Icon="/Visuals/favicon(1).ico"
+        WindowStartupLocation="CenterScreen">
     <Viewbox>
         <Grid Margin="0,0,0,0">
 
             <Image x:Name="chipAnimation" 
                           Width="49" Height="47" 
-                          Source="pack://application:,,,/Roulette;component/Visuals/chip.gif" 
+                          Source="pack://application:,,,/RouletteNew;component/Visuals/chip.gif" 
                           HorizontalAlignment="Right"
                           VerticalAlignment="Top"
                           Margin="0,18,60,0"
@@ -101,7 +103,7 @@
                      Margin="0,341,0,0"/>
             <Image x:Name="boxAroundChips"
                    Width="96" Height="91"
-                   Source="pack://application:,,,/Roulette;component/Visuals/oval.png" 
+                   Source="Visuals/oval.png" 
                    HorizontalAlignment="Right"
                    VerticalAlignment="Top"
                    Margin="0,0,12,0"/>
