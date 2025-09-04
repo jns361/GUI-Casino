@@ -15,20 +15,20 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
 using System.IO;
+using RouletteNew;
 
 namespace Roulette
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    /// Interaktionslogik für RouletteWindow.xaml
+    
+    public partial class RouletteWindow : Window
     {
         //Make it possible to access GameLogic.cs
         private readonly GameLogic game;
         private readonly ChipManagement chips;
         public int playerBetAmount;
         
-        public MainWindow()
+        public RouletteWindow()
         {
             InitializeComponent();
             //Disable number input field as long as the checkbox isn't ticked
@@ -49,10 +49,6 @@ namespace Roulette
             ImageBehavior.SetRepeatBehavior(chipAnimation, System.Windows.Media.Animation.RepeatBehavior.Forever);
 
             ImageBehavior.SetAnimationSpeedRatio(chipAnimation, 1.5);
-        }
-        private void Window_Loaded(object sender,RoutedEventArgs e)
-        {
-            DataObject.AddPastingHandler(numberChoiceBox, OnPaste);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -96,6 +92,13 @@ namespace Roulette
                 //GetBetAmount(value);
 
             }
+        }
+
+        private void HomeMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var splashScreen = new RouletteNew.SplashScreen();
+            splashScreen.Show();
+            this.Close();
         }
 
         private void OnPaste(object sender, DataObjectPastingEventArgs e)

@@ -11,7 +11,7 @@ namespace Roulette
     public class ChipManagement
     {        
         public readonly GameLogic game;
-        public MainWindow interactions;
+        public RouletteWindow interactions;
 
         public int chipAmount;// = 100;
         
@@ -24,7 +24,7 @@ namespace Roulette
 
         public readonly string savePath;
 
-        public ChipManagement(GameLogic game, MainWindow interactions)
+        public ChipManagement(GameLogic game, RouletteWindow interactions)
         {
             this.game = game;
             this.interactions = interactions;
