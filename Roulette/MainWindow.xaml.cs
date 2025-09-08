@@ -31,6 +31,7 @@ namespace Roulette
         public RouletteWindow()
         {
             InitializeComponent();
+            System.Diagnostics.Debug.WriteLine("This is a log.");
             //Disable number input field as long as the checkbox isn't ticked
             chips = new ChipManagement(game, this);
             //chips.SaveChips(); Debug and testing line
@@ -63,6 +64,14 @@ namespace Roulette
                     InputCorrector.Text = "Only numbers from 0 to 36 allowed!";
                     numberChoiceBox.Text = "";
                 }
+            }
+        }
+
+        private void BetAmountBox_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            if (BetAmountInput.Text == "BET" )
+            {
+                BetAmountInput.Text = "";
             }
         }
 
@@ -184,7 +193,7 @@ namespace Roulette
                 ColorGame = true;
             }
 
-            GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds, playerBetAmount);
+            GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// playerBetAmount
             GetBetType();
         }
 
@@ -198,7 +207,7 @@ namespace Roulette
             chips.GetBetAmount(betAmount);
         }
         
-        public void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds, int playerBetAmount)
+        public void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds) //int playerBetAmount
         {
             bool gameWin;
             //Call the WinGenerator method to generate a number and color
@@ -242,8 +251,11 @@ namespace Roulette
         }
 
         //Tickbox behaviour for the number betting
-        private void numberBetting_Checked(object sender, RoutedEventArgs e)
+        private void NumberBetting_Checked(object sender, RoutedEventArgs e)
         {
+            RedHover.Visibility = Visibility.Hidden;
+            BlackHover.Visibility = Visibility.Hidden;
+            GreenHover.Visibility = Visibility.Hidden;
             numberChoiceBox.Focusable = true;
             colorRed.IsEnabled = false;
             colorBlack.IsEnabled = false;
@@ -251,12 +263,15 @@ namespace Roulette
             colorGreen.IsChecked = false;
             colorBlack.IsChecked = false;
             colorRed.IsChecked = false;
+            ColorRed.Background = Brushes.Gray;
+            ColorBlack.Background = Brushes.Gray;
+            ColorGreen.Background = Brushes.Gray;
 
             numberChoiceBox.Background = Brushes.White;
         }
 
         //Tickbox behaviour for the number betting
-        private void numberBetting_Unchecked(object sender, RoutedEventArgs e)
+        private void NumberBetting_Unchecked(object sender, RoutedEventArgs e)
         {
             InputCorrector.Text = "";
             InputCorrector.Visibility = Visibility.Hidden;
@@ -267,33 +282,45 @@ namespace Roulette
             colorRed.Focusable = true;
             colorBlack.Focusable = true;
             colorGreen.Focusable = true;
-            
+            ColorRed.Background = Brushes.Red;
+            ColorBlack.Background = Brushes.Black;
+            ColorGreen.Background = Brushes.Green;
+
             numberChoiceBox.Clear();
             numberChoiceBox.Background = (Brush)new BrushConverter().ConvertFromString("#FFCAC6C6");
         }
 
         //Checkbox behavior for the color red checkbox
-        private void colorRed_Checked(object sender, RoutedEventArgs e)
+        private void ColorRed_Checked(object sender, RoutedEventArgs e)
         {
+            RedHover.Visibility = Visibility.Visible;
+            GreenHover.Visibility = Visibility.Hidden;
+            BlackHover.Visibility = Visibility.Hidden;
             colorGreen.IsChecked = false;
             colorBlack.IsChecked = false;
         }
 
         //Checkbox behavior for the color green checkbox
-        private void colorGreen_Checked(object sender, RoutedEventArgs e)
+        private void ColorGreen_Checked(object sender, RoutedEventArgs e)
         {
+            RedHover.Visibility= Visibility.Hidden;
+            GreenHover.Visibility = Visibility.Visible;
+            BlackHover.Visibility = Visibility.Hidden;
             colorRed.IsChecked = false;
             colorBlack.IsChecked = false;
         }
 
         //Checkbox behavior for the color black checkbox
-        private void colorBlack_Checked(object sender, RoutedEventArgs e)
+        private void ColorBlack_Checked(object sender, RoutedEventArgs e)
         {
+            RedHover.Visibility = Visibility.Hidden;
+            GreenHover.Visibility = Visibility.Hidden;
+            BlackHover.Visibility = Visibility.Visible;
             colorRed.IsChecked = false;
             colorGreen.IsChecked = false;
         }
 
-
+        //Reset chips to the beginning by just changing savefile content
         private void ResetChips(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!", 
@@ -331,5 +358,60 @@ namespace Roulette
             choiceAnnounce.Text = "Press 'RESET' to try again!";
             BetAmountInput.Text = "";
         }
+
+        public void ColorHover(object sender, MouseEventArgs e)
+        {
+            if (colorBlack.IsMouseOver)
+            {
+                colorBlack.Background = Brushes.Transparent;
+                colorBlack.Foreground = Brushes.Transparent;
+                colorBlack.Opacity = 0;
+                BlackHover.Visibility = Visibility.Visible;
+            }
+            else if (colorGreen.IsMouseOver)
+            {
+                colorGreen.Background = Brushes.Transparent;
+                colorGreen.Foreground = Brushes.Transparent;
+                colorGreen.Opacity = 0;
+                GreenHover.Visibility = Visibility.Visible;
+            }
+            else if (colorRed.IsMouseOver)
+            {
+                RedHover.Visibility = Visibility.Visible;
+            }
+        }
+
+        public void ColorNoHover (object sender, MouseEventArgs e)
+        {
+            if (colorBlack.IsChecked == false)
+            {
+                BlackHover.Visibility = Visibility.Hidden;
+            }
+            
+            if (colorGreen.IsChecked == false)
+            {
+                GreenHover.Visibility = Visibility.Hidden;
+            }
+            if (colorRed.IsChecked == false)
+            {
+                RedHover.Visibility = Visibility.Hidden;
+            }
+        }
+        /*
+        public void BlackMouseEnter(object sender, MouseEventArgs e)
+        {
+            colorBlack.Background = Brushes.Transparent;
+            colorBlack.Foreground = Brushes.Transparent;
+            colorBlack.Opacity = 0;
+            BlackHover.Visibility = Visibility.Visible;
+        }
+        public void BlackMouseLeave(object sender, MouseEventArgs e)
+        {
+            if (colorBlack.IsChecked == false)
+            {
+                BlackHover.Visibility = Visibility.Hidden;
+            }
+                
+        }*/
     }
 }
