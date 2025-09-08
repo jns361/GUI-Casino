@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WpfAnimatedGif;
-using System.IO;
-using RouletteNew;
 
 namespace Roulette
 {
     /// Interaktionslogik für RouletteWindow.xaml
-    
+
     public partial class RouletteWindow : Window
     {
         //Make it possible to access GameLogic.cs
         private readonly GameLogic game;
         private readonly ChipManagement chips;
         public int playerBetAmount;
-        
+
         public RouletteWindow()
         {
             InitializeComponent();
@@ -38,7 +28,7 @@ namespace Roulette
             numberChoiceBox.Focusable = false;
             game = new GameLogic();
             chipDisplay.Text = chips.chipAmount.ToString();
-            
+
             //You can hover over the position with your mouse but it doesn't get highlighted
             InputCorrector.Visibility = Visibility.Hidden;
 
@@ -55,7 +45,7 @@ namespace Roulette
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             //Check if input is a valid integer
-            if (int.TryParse(numberChoiceBox.Text, out int value))                 
+            if (int.TryParse(numberChoiceBox.Text, out int value))
             {
                 //Verify it's something from 0 to 36
                 if (value < 0 || value > 36)
@@ -69,7 +59,7 @@ namespace Roulette
 
         private void BetAmountBox_Clicked(object sender, MouseButtonEventArgs e)
         {
-            if (BetAmountInput.Text == "BET" )
+            if (BetAmountInput.Text == "BET")
             {
                 BetAmountInput.Text = "";
             }
@@ -113,7 +103,7 @@ namespace Roulette
         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
             //Check if pasted content is a string
-            if(e.DataObject.GetDataPresent(typeof(string))) 
+            if (e.DataObject.GetDataPresent(typeof(string)))
             {
                 //Get the pasted content as string variable
                 string pasteText = (string)e.DataObject.GetData(typeof(string));
@@ -146,11 +136,11 @@ namespace Roulette
                 InputCorrector.Text = "You can only enter numbers!";
             }
             else
-            { 
+            {
                 InputCorrector.Visibility = Visibility.Hidden;
                 InputCorrector.Text = "";
             }
-            
+
         }
 
         public bool ColorGame;
@@ -160,7 +150,7 @@ namespace Roulette
             InputCorrector.Text = "";
             //Create all important variables for the upcoming codeblock
             string ColorChoice = "";
-            var chipFund= (BetAmountInput.Text);
+            var chipFund = (BetAmountInput.Text);
             int.TryParse(chipFund, out int chipFunds);
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
@@ -175,7 +165,7 @@ namespace Roulette
                 BetAmountInput.Text = "";
                 return;
             }
-            
+
             //Check what color got chosen and set the ColorChoice variable to it
             if (colorRed.IsChecked == true)
             {
@@ -206,7 +196,7 @@ namespace Roulette
         {
             chips.GetBetAmount(betAmount);
         }
-        
+
         public void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds) //int playerBetAmount
         {
             bool gameWin;
@@ -229,12 +219,12 @@ namespace Roulette
                     gameWin = false;
                 }
             }
-           
+
             //If the user chose a number to play with, evaluate if he got the correct number or not
             else
             {
                 if (game.CheckNumberWin(PlayerNumber, result.Number))
-                { 
+                {
                     choiceAnnounce.Text = $"You win! You picked the number {PlayerNumber}, " +
                         $"the number {result.Number} got rolled with the color {result.Color}";
                     gameWin = true;
@@ -303,7 +293,7 @@ namespace Roulette
         //Checkbox behavior for the color green checkbox
         private void ColorGreen_Checked(object sender, RoutedEventArgs e)
         {
-            RedHover.Visibility= Visibility.Hidden;
+            RedHover.Visibility = Visibility.Hidden;
             GreenHover.Visibility = Visibility.Visible;
             BlackHover.Visibility = Visibility.Hidden;
             colorRed.IsChecked = false;
@@ -323,17 +313,17 @@ namespace Roulette
         //Reset chips to the beginning by just changing savefile content
         private void ResetChips(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!", 
+            MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
                 "Continue?",
                 MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                
+
                 string savePath = chips.savePath;
                 Console.WriteLine(savePath);
                 using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
                 {
-                    sw.Write("1000");                    
+                    sw.Write("1000");
                 }
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
@@ -342,9 +332,9 @@ namespace Roulette
                 Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
                     $" backend amount: {chips.chipAmount}");
                 MessageBox.Show("Reset successful!", "Reset successful!");
-                
-            }   
-                
+
+            }
+
             else
             {
                 MessageBox.Show("Reset cancelled!", "Reset cancelled!");
@@ -381,13 +371,13 @@ namespace Roulette
             }
         }
 
-        public void ColorNoHover (object sender, MouseEventArgs e)
+        public void ColorNoHover(object sender, MouseEventArgs e)
         {
             if (colorBlack.IsChecked == false)
             {
                 BlackHover.Visibility = Visibility.Hidden;
             }
-            
+
             if (colorGreen.IsChecked == false)
             {
                 GreenHover.Visibility = Visibility.Hidden;

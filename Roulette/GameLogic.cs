@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Roulette
+﻿namespace Roulette
 {
     public class GameLogic
     {
@@ -19,7 +13,7 @@ namespace Roulette
         {
             //Random number gen
             int winningNumber = random.Next(0, 37);
-            string winningColor = "";           
+            string winningColor = "";
 
             //Choose the win color based on the generated number
             if (winningNumber == 0)
@@ -35,7 +29,7 @@ namespace Roulette
                 winningColor = "red";
             }
 
-            return(winningNumber,  winningColor);
+            return (winningNumber, winningColor);
         }
 
         public bool CheckColorWin(string playerColor, string winningColor)

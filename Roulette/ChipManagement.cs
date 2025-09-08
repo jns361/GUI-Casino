@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 
 namespace Roulette
 {
     public class ChipManagement
-    {        
+    {
         public readonly GameLogic game;
         public RouletteWindow interactions;
 
         public int chipAmount;// = 100;
-        
+
         //Set \Appdata\Roaming\Roulette path for savefile txt
         private readonly string saveDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -31,20 +27,20 @@ namespace Roulette
 
             savePath = Path.Combine(saveDirectory, "Savefile.txt");
 
-            LoadChips();            
+            LoadChips();
         }
-        
+
         //set amount after bet + amount after win
         public void SetChipAmount(bool gameWin, int betAmount, int PlayerNumber, string playerColor)
         {
-            int prizeForWin = 0;            
+            int prizeForWin = 0;
             chipAmount -= betAmount;
-            interactions.chipDisplay.Text=chipAmount.ToString();
+            interactions.chipDisplay.Text = chipAmount.ToString();
             Animations.PopOut(interactions.chipDisplay);
             //after color bet
             bool ColorGame = interactions.GetBetType();
             if (gameWin)
-            { 
+            {
                 if (ColorGame)
                 {
                     if (playerColor.ToLower() == "red" || playerColor.ToLower() == "black")
@@ -58,10 +54,10 @@ namespace Roulette
                 }
                 else if (!ColorGame)
                 {
-                    prizeForWin = betAmount * 36;    
+                    prizeForWin = betAmount * 36;
                 }
                 chipAmount += prizeForWin;
-                interactions.chipDisplay.Text= chipAmount.ToString();
+                interactions.chipDisplay.Text = chipAmount.ToString();
             }
             else if (!gameWin)
             {
@@ -70,7 +66,7 @@ namespace Roulette
                     interactions.NoChipsLeft();
                 }
                 prizeForWin = 0;
-                
+
                 return;
             }
         }
@@ -83,7 +79,7 @@ namespace Roulette
         public void SaveChips()
         {
             try
-            {                
+            {
                 //Create folder, if not existing already
                 Directory.CreateDirectory(saveDirectory);
 
@@ -97,7 +93,7 @@ namespace Roulette
                 }
                 Console.WriteLine("Save successful at: " + savePath);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
@@ -107,15 +103,16 @@ namespace Roulette
             }
         }
 
-        public int GetChipAmount() 
-        { 
-            return chipAmount; 
+        public int GetChipAmount()
+        {
+            return chipAmount;
         }
 
         public void LoadChips()
-        {   
+        {
             try
-            {;
+            {
+                ;
                 if (File.Exists(savePath))
                 {
                     string content = File.ReadAllText(savePath);
