@@ -11,9 +11,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Visuals\BlackChip.svg.png" />
+    <None Remove="Visuals\BlueChip.png" />
     <None Remove="Visuals\chip.gif" />
+    <None Remove="Visuals\DollarSign.png" />
     <None Remove="Visuals\favicon%281%29.ico" />
+    <None Remove="Visuals\GreenChip.png" />
     <None Remove="Visuals\oval.png" />
+    <None Remove="Visuals\RedChip.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,14 +30,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Visuals\BlackChip.svg.png" />
+    <Resource Include="Visuals\BlueChip.png" />
     <Resource Include="Visuals\chip.gif">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Visuals\DollarSign.png" />
     <Resource Include="Visuals\faviconProj.ico" />
     <Resource Include="Visuals\favicon(1).ico" />
+    <Resource Include="Visuals\GreenChip.png" />
     <Resource Include="Visuals\oval.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Visuals\RedChip.png" />
   </ItemGroup>
 
   <ItemGroup>

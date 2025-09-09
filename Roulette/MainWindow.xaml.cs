@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
-
+using System.Windows.Media.Animation;
 namespace Roulette
 {
     /// Interaktionslogik für RouletteWindow.xaml
@@ -21,6 +21,9 @@ namespace Roulette
         public RouletteWindow()
         {
             InitializeComponent();
+            ChipRain.Loaded += ChipRain_Loaded;
+            
+            game = new GameLogic();
             System.Diagnostics.Debug.WriteLine("This is a log.");
             //Disable number input field as long as the checkbox isn't ticked
             chips = new ChipManagement(game, this);
@@ -40,6 +43,29 @@ namespace Roulette
             ImageBehavior.SetRepeatBehavior(chipAnimation, System.Windows.Media.Animation.RepeatBehavior.Forever);
 
             ImageBehavior.SetAnimationSpeedRatio(chipAnimation, 1.5);
+        }
+
+        private void ChipRain_Loaded(object sender, RoutedEventArgs e)
+        {
+            Animations.StartChipRain(ChipRain, 20);
+        }
+
+        private void RouletteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation fadeOut = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromSeconds(0.75)
+            };
+
+            fadeOut.Completed += (s, a) =>
+            {
+                SplashOverlay.Visibility = Visibility.Hidden;
+                gameRoulette.Visibility = Visibility.Visible;
+            };
+
+            SplashOverlay.BeginAnimation(UIElement.OpacityProperty, fadeOut);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -95,12 +121,30 @@ namespace Roulette
 
         private void HomeMenu_Click(object sender, RoutedEventArgs e)
         {
-            var splashScreen = new RouletteNew.SplashScreen();
-            splashScreen.Show();
-            this.Close();
+            DoubleAnimation fadeOut = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromSeconds(0.75)
+            };
+
+            DoubleAnimation fadeIn = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = TimeSpan.FromSeconds(0.75)
+            };
+            fadeIn.Completed += (s, a) =>
+            {
+                gameRoulette.Visibility = Visibility.Hidden;
+                SplashOverlay.Visibility = Visibility.Visible;
+            };
+
+            gameRoulette.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            SplashOverlay.BeginAnimation(UIElement.OpacityProperty, fadeIn);
         }
 
-        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+         private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
             //Check if pasted content is a string
             if (e.DataObject.GetDataPresent(typeof(string)))
@@ -147,6 +191,10 @@ namespace Roulette
         //public int BetAmount;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (BetAmountInput.Text == "BET")
+            {
+                BetAmountInput.Text = "";
+            }
             InputCorrector.Text = "";
             //Create all important variables for the upcoming codeblock
             string ColorChoice = "";
@@ -162,6 +210,15 @@ namespace Roulette
             {
                 InputCorrector.Visibility = Visibility.Visible;
                 InputCorrector.Text = "You can't go below 0!";
+                BetAmountInput.Text = "";
+                return;
+            }
+
+            //Forbid an empty field
+            if (string.IsNullOrWhiteSpace(chipFund))
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "You can't bet nothing!";
                 BetAmountInput.Text = "";
                 return;
             }
@@ -277,7 +334,7 @@ namespace Roulette
             ColorGreen.Background = Brushes.Green;
 
             numberChoiceBox.Clear();
-            numberChoiceBox.Background = (Brush)new BrushConverter().ConvertFromString("#FFCAC6C6");
+            numberChoiceBox.Background = new SolidColorBrush(Color.FromRgb(202, 198, 198));
         }
 
         //Checkbox behavior for the color red checkbox
