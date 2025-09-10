@@ -1,0 +1,176 @@
+﻿<UserControl x:Class="Casino.RoulettePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="570">
+    <Viewbox>
+        <Grid x:Name="RouletteGrid" Cursor="" Width="580" Background="#FFF9F6EE">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="279*"/>
+                <RowDefinition Height="47*"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="BlackHover"
+                    Background="Turquoise" Margin="280,369,50,145"
+                    Width="44" Height="44"
+                    Visibility="Hidden"/>
+
+            <Border x:Name="ColorBlack"
+                    Background="Black"
+                    Width="40" Height="40" Margin="282,371,52,147"/>
+
+            <Border x:Name="GreenHover" 
+                    Background="Turquoise" Margin="165,369,165,145"
+                    Width="44" Height="44"
+                    Visibility="Hidden"/>
+
+            <Border x:Name="ColorGreen"
+                    Background="Green"
+                    Width="40" Height="40" Margin="167,371,167,147"/>
+
+            <Border x:Name="RedHover"
+                    Background="Turquoise" Margin="50,370,280,144"
+                    Width="44" Height="44"
+                    Visibility="Hidden"/>
+
+            <Border x:Name="ColorRed"
+                    Background="Red"
+                    Width="40" Height="40" Margin="52,372,282,146"/>
+
+            <Image x:Name="chipAnimation" 
+                    Width="49" Height="47" 
+                    Source="pack://application:,,,/Casino;component/Visuals/chip.gif" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,18,158,0"
+                    />
+
+            <TextBox x:Name="chipDisplay" 
+                     Margin="0,30,102,0" 
+                     TextWrapping="Wrap"
+                     Text="1000"
+                     HorizontalAlignment="Right" VerticalAlignment="Top" 
+                     Width="62"
+                     FontSize="17"
+                     BorderThickness="0"
+                     IsReadOnly="True" Focusable="False" Background="#FFF9F6EE" RenderTransformOrigin="0.527,0.293"/>
+
+            <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="270" Margin="0,379,0,0">
+
+                <RadioButton x:Name="colorRed"
+                             Content="Red" Canvas.Top="-9"
+                             Checked="ColorRed_Checked" IsTabStop="False" 
+                             MouseEnter="ColorHover" MouseLeave="ColorNoHover"
+                             Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center"
+                             Background="Transparent" BorderBrush="Transparent" OpacityMask="Transparent"/>
+                <RadioButton x:Name="colorGreen" 
+                             Content="" 
+                             Canvas.Left="115" Canvas.Top="-9"
+                             Checked="ColorGreen_Checked" IsTabStop="False"
+                             MouseEnter="ColorHover" MouseLeave="ColorNoHover"
+                             Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"
+                             Background="Transparent" BorderBrush="Transparent" OpacityMask="Transparent"/>
+                <RadioButton x:Name="colorBlack"
+                             Content="" 
+                             Canvas.Left="230" Canvas.Top="-9"
+                             Checked="ColorBlack_Checked" IsTabStop="False" 
+                             MouseEnter="ColorHover" MouseLeave="ColorNoHover"
+                             Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Top"
+                             Background="Transparent" BorderBrush="Transparent" OpacityMask="Transparent"/>
+            </Canvas>
+            <TextBox x:Name="numberChoiceBox" 
+                     PreviewTextInput="CheckForLetters"
+                     HorizontalAlignment="Center" 
+                     Margin="0,459,0,0" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top" 
+                     Width="120" 
+                     TextChanged="TextBox_TextChanged" 
+                     SelectionOpacity="0.2" 
+                     AllowDrop="False" 
+                     Background="#FFCAC6C6"/>
+
+            <Button x:Name="submitButton" 
+                    Content="Submit" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,500,0,0" 
+                    VerticalAlignment="Top" 
+                    Click="Button_Click" IsTabStop="False" />
+
+            <Button x:Name="backHome"
+                    Content="Homemenu"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top" 
+                    Margin="109,30,0,0"
+                    Click="HomeMenu_Click"
+                    />
+
+            <CheckBox Content="Bet on Number" 
+                      HorizontalAlignment="Center" 
+                      Margin="0,430,0,0" 
+                      VerticalAlignment="Top" 
+                      Checked="NumberBetting_Checked" 
+                      Unchecked="NumberBetting_Unchecked" IsTabStop="False" />
+
+            <TextBlock x:Name="choiceAnnounce"
+                       HorizontalAlignment="Center" 
+                       Margin="0,169,0,0" 
+                       TextWrapping="Wrap" 
+                       Text="Enter your desired stake in the beige box!" 
+                       FontSize="18"
+                       VerticalAlignment="Top"
+                       TextAlignment="Center"
+                       Width="362"/>
+
+            <TextBox x:Name="InputCorrector"
+                     HorizontalAlignment="Center" 
+                     Margin="0,528,0,0" 
+                     TextWrapping="Wrap" 
+                     Text="" 
+                     TextAlignment="Center"
+                     VerticalAlignment="Top" 
+                     Width="226"
+                     FontFamily="72 Black" 
+                     BorderBrush="#FFF9F6EE" 
+                     Foreground="#FFB90000" 
+                     AllowDrop="False" 
+                     Focusable="False" 
+                     Cursor="No"  Background="#FFF9F6EE"/>
+
+            <TextBox x:Name="BetAmountInput" 
+                     Text="BET" TextAlignment="Center"
+                     PreviewMouseLeftButtonDown="BetAmountBox_Clicked"
+                     PreviewTextInput="CheckForLetters"
+                     HorizontalAlignment="Center" 
+                     TextWrapping="Wrap" 
+                     VerticalAlignment="Top" 
+                     Width="50" 
+                     TextChanged="TextBoxChips_TextChanged" 
+                     SelectionOpacity="0.2" 
+                     AllowDrop="False" 
+                     Background="Beige" 
+                     Cursor="Hand"
+                     Margin="0,333,0,0" IsTabStop="False"/>
+            <Button Content="RESET"  ClipToBounds="True"
+                    HorizontalAlignment="Left" 
+                    Margin="9,32,0,0" 
+                    VerticalAlignment="Top" 
+                    Click="ResetChips" 
+                    Width="36" 
+                    Height="21" IsTabStop="False" Grid.Row="1" />
+            <Image x:Name="boxAroundChips"
+                   Width="96" Height="92"
+                   Source="Visuals/oval.png" 
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Top"
+                   Margin="0,0,109,0" RenderTransformOrigin="-0.878,0.472"/>
+            <Border Margin="381,24,111,490"
+                    Background="Transparent"
+                    CornerRadius="20"
+                    Cursor="No"/>
+
+        </Grid>
+    </Viewbox>    
+</UserControl>

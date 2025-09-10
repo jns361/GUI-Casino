@@ -1,10 +1,9 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
-namespace Roulette
+namespace Casino
 {
     public class Animations
     {
@@ -35,11 +34,11 @@ namespace Roulette
             Random rnd = new Random();
             string[] chipImages = new string[]
             {
-            "pack://application:,,,/RouletteNew;component/Visuals/BlackChip.svg.png",
-            "pack://application:,,,/RouletteNew;component/Visuals/BlueChip.png",
-            "pack://application:,,,/RouletteNew;component/Visuals/GreenChip.png",
-            "pack://application:,,,/RouletteNew;component/Visuals/RedChip.png",
-            "pack://application:,,,/RouletteNew;component/Visuals/DollarSign.png"
+            "pack://application:,,,/Casino;component/Visuals/BlackChip.svg.png",
+            "pack://application:,,,/Casino;component/Visuals/BlueChip.png",
+            "pack://application:,,,/Casino;component/Visuals/GreenChip.png",
+            "pack://application:,,,/Casino;component/Visuals/RedChip.png",
+            "pack://application:,,,/Casino;component/Visuals/DollarSign.png"
             };
 
             for (int i = 0; i < chipCount; i++)
@@ -56,7 +55,7 @@ namespace Roulette
                 chipCanvas.Children.Add(chip);
 
                 DoubleAnimation fallAnim = new DoubleAnimation
-                { 
+                {
                     From = -50,
                     To = chipCanvas.ActualHeight,
                     Duration = TimeSpan.FromSeconds(3 + rnd.NextDouble() * 2),

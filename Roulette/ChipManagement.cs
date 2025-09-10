@@ -1,14 +1,13 @@
 ﻿using System.IO;
 using System.Text;
+using RouletteNew;
 
-
-namespace Roulette
+namespace Casino
 {
     public class ChipManagement
     {
         public readonly GameLogic game;
-        public RouletteWindow interactions;
-
+        public RoulettePage ui;
         public int chipAmount;// = 100;
 
         //Set \Appdata\Roaming\Roulette path for savefile txt
@@ -20,10 +19,10 @@ namespace Roulette
 
         public readonly string savePath;
 
-        public ChipManagement(GameLogic game, RouletteWindow interactions)
+        public ChipManagement(GameLogic game, RoulettePage ui)
         {
             this.game = game;
-            this.interactions = interactions;
+            this.ui= ui;
 
             savePath = Path.Combine(saveDirectory, "Savefile.txt");
 
@@ -35,10 +34,10 @@ namespace Roulette
         {
             int prizeForWin = 0;
             chipAmount -= betAmount;
-            interactions.chipDisplay.Text = chipAmount.ToString();
-            Animations.PopOut(interactions.chipDisplay);
+            ui.chipDisplay.Text = chipAmount.ToString();
+            Animations.PopOut(ui.chipDisplay);
             //after color bet
-            bool ColorGame = interactions.GetBetType();
+            bool ColorGame = ui.GetBetType();
             if (gameWin)
             {
                 if (ColorGame)
@@ -57,13 +56,13 @@ namespace Roulette
                     prizeForWin = betAmount * 36;
                 }
                 chipAmount += prizeForWin;
-                interactions.chipDisplay.Text = chipAmount.ToString();
+                ui.chipDisplay.Text = chipAmount.ToString();
             }
             else if (!gameWin)
             {
                 if (chipAmount == 0)
                 {
-                    interactions.NoChipsLeft();
+                    ui.NoChipsLeft();
                 }
                 prizeForWin = 0;
 

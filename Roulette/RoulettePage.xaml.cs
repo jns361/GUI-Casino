@@ -7,52 +7,53 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
+using System.ComponentModel;
 namespace Casino
 {
-    /// Interaktionslogik für RouletteWindow.xaml
-
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for RoulettePage.xaml
+    /// </summary>
+    public partial class RoulettePage : UserControl
     {
-        //Make it possible to access GameLogic.cs
-        public RoulettePage rlp;
+        private GameLogic game;
+        private ChipManagement chips;
         public int playerBetAmount;
         public MainWindow main;
-        
 
-        public MainWindow()
+        public RoulettePage(MainWindow mainWindow)
         {
             InitializeComponent();
-            ChipRain.Loaded += ChipRain_Loaded;
+            main = mainWindow;
 
-            rlp = new RoulettePage(this);
-            rlp.Visibility = Visibility.Hidden;
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                SetupGame();
+                LoadChipGif();
+            }
 
-            MainGrid.Children.Add(rlp);
-            //System.Diagnostics.Debug.WriteLine("This is a log.");
-            //Disable number input field as long as the checkbox isn't ticked
-            //chips.SaveChips(); Debug and testing line
-            //You can hover over the position with your mouse but it doesn't get           
-        }
-
-        private void ChipRain_Loaded(object sender, RoutedEventArgs e)
-        {
-            Animations.StartChipRain(ChipRain, 20);
-        }
-
-        private void RouletteButton_Click(object sender, RoutedEventArgs e)
-        {
-            // RoulettePage selbst sichtbar
-            rlp.Visibility = Visibility.Visible;
-            rlp.RouletteGrid.Visibility = Visibility.Visible;
-            rlp.RouletteGrid.Opacity = 0;
-
-            DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.75));
-            rlp.RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeIn);
             
-
+            numberChoiceBox.Focusable = false;
+            InputCorrector.Visibility = Visibility.Hidden;
         }
 
-        /*private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SetupGame()
+        { 
+            game = new GameLogic();
+            chips = new ChipManagement(game, this);
+            chipDisplay.Text = chips.chipAmount.ToString();
+        }
+
+        private void LoadChipGif()
+        {
+            var imageUri = new Uri("pack://application:,,,/Casino;component/Visuals/chip.gif", UriKind.Absolute);
+            var image = new BitmapImage(imageUri);
+
+            ImageBehavior.SetAnimatedSource(chipAnimation, image);
+            ImageBehavior.SetRepeatBehavior(chipAnimation, System.Windows.Media.Animation.RepeatBehavior.Forever);
+            ImageBehavior.SetAnimationSpeedRatio(chipAnimation, 1.5);
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             //Check if input is a valid integer
             if (int.TryParse(numberChoiceBox.Text, out int value))
@@ -65,17 +66,17 @@ namespace Casino
                     numberChoiceBox.Text = "";
                 }
             }
-        }*/
+        }
 
-        /*private void BetAmountBox_Clicked(object sender, MouseButtonEventArgs e)
+        private void BetAmountBox_Clicked(object sender, MouseButtonEventArgs e)
         {
             if (BetAmountInput.Text == "BET")
             {
                 BetAmountInput.Text = "";
             }
-        }*/
+        }
 
-        /*private void TextBoxChips_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxChips_TextChanged(object sender, TextChangedEventArgs e)
         {
             //Check if entered bet amount is a valid integer
             if (int.TryParse(BetAmountInput.Text, out int value))
@@ -99,40 +100,10 @@ namespace Casino
                 }
                 //chipAmount = chipAmount - value;
                 //GetBetAmount(value);
-
             }
-        }*/
-        /*
-        private void HomeMenu_Click(object sender, RoutedEventArgs e)
-        {
-            //Debug.WriteLine("Starting window change to Home menu");
-            DoubleAnimation fadeOut = new DoubleAnimation
-            {
-                From = 1.0,
-                To = 0.0,
-                Duration = TimeSpan.FromSeconds(0.75)
-            };
-
-            DoubleAnimation fadeIn = new DoubleAnimation
-            {
-                From = 0.0,
-                To = 1.0,
-                Duration = TimeSpan.FromSeconds(0.75)
-            };
-            fadeIn.Completed += (s, a) =>
-            {
-                rlp.Visibility = Visibility.Visible;
-                main.MainGrid.Visibility = Visibility.Hidden;
-                //Debug.WriteLine("Main menu should now be visible");
-            };
-            //Debug.WriteLine("Starting fadeOut gameroulette");
-           // MainGrid/BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            //Debug.WriteLine("Starting fadeIn mainmenu");
-            MainGrid.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-            //Debug.WriteLine("Ended transition to main menu; ");
         }
 
-        /*private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        private void OnPaste(object sender, DataObjectPastingEventArgs e)
         {
             //Check if pasted content is a string
             if (e.DataObject.GetDataPresent(typeof(string)))
@@ -154,9 +125,9 @@ namespace Casino
             {
                 e.CancelCommand();
             }
-        }*/
+        }
 
-        /*private void CheckForLetters(object sender, TextCompositionEventArgs e)
+        private void CheckForLetters(object sender, TextCompositionEventArgs e)
         {
             //Check if user wants to write letters instead of digits
             e.Handled = !e.Text.All(char.IsDigit);
@@ -173,10 +144,9 @@ namespace Casino
                 InputCorrector.Text = "";
             }
 
-        }*/
+        }
 
-        /*public bool ColorGame;
-        //public int BetAmount;
+        public bool ColorGame;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (BetAmountInput.Text == "BET")
@@ -201,16 +171,6 @@ namespace Casino
                 BetAmountInput.Text = "";
                 return;
             }
-
-            //Forbid an empty field
-            if (string.IsNullOrWhiteSpace(chipFund))
-            {
-                InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = "You can't bet nothing!";
-                BetAmountInput.Text = "";
-                return;
-            }
-
             //Check what color got chosen and set the ColorChoice variable to it
             if (colorRed.IsChecked == true)
             {
@@ -285,7 +245,6 @@ namespace Casino
             chips.SaveChips();
         }
 
-        //Tickbox behaviour for the number betting
         private void NumberBetting_Checked(object sender, RoutedEventArgs e)
         {
             RedHover.Visibility = Visibility.Hidden;
@@ -431,22 +390,34 @@ namespace Casino
             {
                 RedHover.Visibility = Visibility.Hidden;
             }
-        }*/
-        /*
-        public void BlackMouseEnter(object sender, MouseEventArgs e)
-        {
-            colorBlack.Background = Brushes.Transparent;
-            colorBlack.Foreground = Brushes.Transparent;
-            colorBlack.Opacity = 0;
-            BlackHover.Visibility = Visibility.Visible;
         }
-        public void BlackMouseLeave(object sender, MouseEventArgs e)
+
+        private void HomeMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (colorBlack.IsChecked == false)
+            //Debug.WriteLine("Starting window change to Home menu");
+            DoubleAnimation fadeOut = new DoubleAnimation
             {
-                BlackHover.Visibility = Visibility.Hidden;
-            }
-                
-        }*/
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromSeconds(0.75)
+            };
+
+            DoubleAnimation fadeIn = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = TimeSpan.FromSeconds(0.75)
+            };
+
+            fadeOut.Completed += (s, a) =>
+            {
+                RouletteGrid.Visibility = Visibility.Hidden;     
+            };
+
+            RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            //Debug.WriteLine("Starting fadeIn mainmenu");
+            //main.MainGrid.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            //Debug.WriteLine("Ended transition to main menu; ");
+        }
     }
 }

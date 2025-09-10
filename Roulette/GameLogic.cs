@@ -1,4 +1,4 @@
-﻿namespace Roulette
+﻿namespace Casino
 {
     public class GameLogic
     {
