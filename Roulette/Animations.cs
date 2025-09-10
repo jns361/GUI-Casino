@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-
+using System.Windows.Threading;
 namespace Casino
 {
     public class Animations
@@ -28,8 +28,8 @@ namespace Casino
         }
 
         private readonly Random rnd = new Random();
-
-        public static void StartChipRain(Canvas chipCanvas, int chipCount = 20)
+        private static DispatcherTimer timer;
+        public static void StartChipRain(Canvas chipCanvas, int chipCount = 2)
         {
             Random rnd = new Random();
             string[] chipImages = new string[]
@@ -41,29 +41,43 @@ namespace Casino
             "pack://application:,,,/Casino;component/Visuals/DollarSign.png"
             };
 
-            for (int i = 0; i < chipCount; i++)
+            timer = new DispatcherTimer
             {
-                Image chip = new Image
+                Interval = TimeSpan.FromMilliseconds(250)
+            };
+
+            timer.Tick += (s, e) =>
+            {
+                for(int i = 0; i < 2 ; i++)
                 {
-                    Source = new BitmapImage(new Uri(chipImages[rnd.Next(chipImages.Length)])),
-                    Width = rnd.Next(25, 66),
-                    Height = rnd.Next(25, 66)
-                };
+                    Image chip = new Image
+                    {
+                        Source = new BitmapImage(new Uri(chipImages[rnd.Next(chipImages.Length)])),
+                        Width = rnd.Next(25, 66),
+                        Height = rnd.Next(25, 66)
+                    };
 
-                Canvas.SetLeft(chip, rnd.Next(0, (int)chipCanvas.ActualWidth));
-                Canvas.SetTop(chip, -50);
-                chipCanvas.Children.Add(chip);
+                    Canvas.SetLeft(chip, rnd.Next(0, (int)chipCanvas.ActualWidth));
+                    Canvas.SetTop(chip, -50);
+                    chipCanvas.Children.Add(chip);
 
-                DoubleAnimation fallAnim = new DoubleAnimation
-                {
-                    From = -50,
-                    To = chipCanvas.ActualHeight,
-                    Duration = TimeSpan.FromSeconds(3 + rnd.NextDouble() * 2),
-                    RepeatBehavior = RepeatBehavior.Forever
-                };
+                    DoubleAnimation fallAnim = new DoubleAnimation
+                    {
+                        From = -50,
+                        To = chipCanvas.ActualHeight + 50,
+                        Duration = TimeSpan.FromSeconds(3 + rnd.NextDouble() * 2),
+                        FillBehavior = FillBehavior.Stop
+                    };
 
-                chip.BeginAnimation(Canvas.TopProperty, fallAnim);
-            }
+                    fallAnim.Completed += (senderAnim, argsAnim) =>
+                    {
+                        chipCanvas.Children.Remove(chip);
+                    };
+
+                    chip.BeginAnimation(Canvas.TopProperty, fallAnim);
+                }
+            };
+            timer.Start();
         }
 
     }

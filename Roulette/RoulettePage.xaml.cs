@@ -411,12 +411,13 @@ namespace Casino
 
             fadeOut.Completed += (s, a) =>
             {
-                RouletteGrid.Visibility = Visibility.Hidden;     
+                RouletteGrid.Visibility = Visibility.Hidden;
+                main.ChipRain.Visibility = Visibility.Visible;
             };
 
             RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeOut);
             //Debug.WriteLine("Starting fadeIn mainmenu");
-            //main.MainGrid.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            main.ChipRain.BeginAnimation(UIElement.OpacityProperty, fadeIn);
             //Debug.WriteLine("Ended transition to main menu; ");
         }
     }

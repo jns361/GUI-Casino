@@ -17,6 +17,7 @@
                         IsHitTestVisible="False">
                 </Canvas>
 
+                <Border x:Name="Placeholder" Background="Transparent" Width="570" Height="650"/>
 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 
