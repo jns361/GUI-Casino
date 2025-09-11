@@ -13,6 +13,10 @@
                 <RowDefinition Height="47*"/>
             </Grid.RowDefinitions>
 
+            <Image x:Name="wallpaper"
+                   Source="pack://application:,,,/Visuals/background.png"
+                   Opacity="0" Margin="-270,-248,-270,-217" Grid.RowSpan="2"/>
+
             <Border x:Name="BlackHover"
                     Background="Turquoise" Margin="280,369,50,145"
                     Width="44" Height="44"
@@ -47,6 +51,11 @@
                     VerticalAlignment="Top"
                     Margin="0,18,158,0"
                     />
+
+            <Image x:Name="rouletteWheel"
+                   Width="150" Height="150"
+                   Source="pack://application:,,,/Visuals/roulette.png"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,145,0,0"/>
 
             <TextBox x:Name="chipDisplay" 
                      Margin="0,30,102,0" 
@@ -117,7 +126,7 @@
 
             <TextBlock x:Name="choiceAnnounce"
                        HorizontalAlignment="Center" 
-                       Margin="0,169,0,0" 
+                       Margin="0,73,0,0" 
                        TextWrapping="Wrap" 
                        Text="Enter your desired stake in the beige box!" 
                        FontSize="18"
@@ -173,5 +182,5 @@
                     Cursor="No"/>
 
         </Grid>
-    </Viewbox>    
+    </Viewbox>
 </UserControl>

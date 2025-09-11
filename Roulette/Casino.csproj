@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Visuals\background.png" />
     <None Remove="Visuals\BlackChip.svg.png" />
     <None Remove="Visuals\BlueChip.png" />
     <None Remove="Visuals\chip.gif" />
@@ -19,10 +20,16 @@
     <None Remove="Visuals\GreenChip.png" />
     <None Remove="Visuals\oval.png" />
     <None Remove="Visuals\RedChip.png" />
+    <None Remove="Visuals\roulette.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="faviconProj.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Visuals\background.png" />
+    <Resource Include="Visuals\roulette.png" />
   </ItemGroup>
 
   <ItemGroup>

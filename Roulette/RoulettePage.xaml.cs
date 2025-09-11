@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
+using System.Windows;
 using System.ComponentModel;
 namespace Casino
 {
@@ -25,6 +26,7 @@ namespace Casino
             InitializeComponent();
             main = mainWindow;
 
+            // make everything gets shown correctly
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 SetupGame();
@@ -188,18 +190,35 @@ namespace Casino
                 ColorGame = true;
             }
 
-            GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// playerBetAmount
-            GetBetType();
+            
+
+            Random rnd = new Random();
+            //Spin the wheel on click
+
+            float repeats = (float)(rnd.NextDouble() * (6.5 - 3.5) + 3.5);
+            RotateTransform rotateTransform = new RotateTransform(360);
+            rouletteWheel.RenderTransform = rotateTransform;
+            rouletteWheel.RenderTransformOrigin = new Point(0.5, 0.5);
+            DoubleAnimation WheelSpin = new DoubleAnimation
+            {
+                From = 0,
+                To = 360 * (repeats),
+                Duration = TimeSpan.FromSeconds(2.5),
+                EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut },
+            };
+            
+            WheelSpin.Completed += (s, e) =>
+            {
+                GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// playerBetAmount
+                GetBetType();
+            };
+
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, WheelSpin);
         }
 
         public bool GetBetType()
         {
             return ColorGame;
-        }
-
-        private void GetBetAmount(int betAmount)
-        {
-            chips.GetBetAmount(betAmount);
         }
 
         public void GameLoop(bool ColorGame, string ColorChoice, int PlayerNumber, int chipFunds) //int playerBetAmount
@@ -210,7 +229,6 @@ namespace Casino
             //If the user chose a color to play with, evaluate if he got the correct color or not
             if (ColorGame)
             {
-                //Hier chips iwie machen lol
                 if (game.CheckColorWin(ColorChoice, result.Color))
                 {
                     choiceAnnounce.Text = $"You win! You picked the color {ColorChoice}, " +

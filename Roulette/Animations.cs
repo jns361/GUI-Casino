@@ -34,11 +34,11 @@ namespace Casino
             Random rnd = new Random();
             string[] chipImages = new string[]
             {
-            "pack://application:,,,/Casino;component/Visuals/BlackChip.svg.png",
-            "pack://application:,,,/Casino;component/Visuals/BlueChip.png",
-            "pack://application:,,,/Casino;component/Visuals/GreenChip.png",
-            "pack://application:,,,/Casino;component/Visuals/RedChip.png",
-            "pack://application:,,,/Casino;component/Visuals/DollarSign.png"
+                "pack://application:,,,/Casino;component/Visuals/BlackChip.svg.png",
+                "pack://application:,,,/Casino;component/Visuals/BlueChip.png",
+                "pack://application:,,,/Casino;component/Visuals/GreenChip.png",
+                "pack://application:,,,/Casino;component/Visuals/RedChip.png",
+                "pack://application:,,,/Casino;component/Visuals/DollarSign.png"
             };
 
             timer = new DispatcherTimer
@@ -56,7 +56,6 @@ namespace Casino
                         Width = rnd.Next(25, 66),
                         Height = rnd.Next(25, 66)
                     };
-
                     Canvas.SetLeft(chip, rnd.Next(0, (int)chipCanvas.ActualWidth));
                     Canvas.SetTop(chip, -50);
                     chipCanvas.Children.Add(chip);
@@ -66,15 +65,31 @@ namespace Casino
                         From = -50,
                         To = chipCanvas.ActualHeight + 50,
                         Duration = TimeSpan.FromSeconds(3 + rnd.NextDouble() * 2),
-                        FillBehavior = FillBehavior.Stop
+                        FillBehavior = FillBehavior.Stop,
                     };
+
+                    RotateTransform rotateTransform = new RotateTransform(360);
+                    
 
                     fallAnim.Completed += (senderAnim, argsAnim) =>
                     {
                         chipCanvas.Children.Remove(chip);
                     };
 
+                    chip.RenderTransform = rotateTransform;
+                    chip.RenderTransformOrigin = new System.Windows.Point  (0.5, 0.5);
+
+                    DoubleAnimation RotateAnim = new DoubleAnimation
+                    {
+                        From = 0,
+                        To = 360,
+                        Duration = TimeSpan.FromSeconds(2),
+                        RepeatBehavior = RepeatBehavior.Forever,
+                    };
                     chip.BeginAnimation(Canvas.TopProperty, fallAnim);
+                    rotateTransform.BeginAnimation(RotateTransform.AngleProperty, RotateAnim);
+
+
                 }
             };
             timer.Start();

@@ -70,10 +70,7 @@ namespace Casino
             }
         }
 
-        public int GetBetAmount(int betAmount)
-        {
-            return betAmount;
-        }
+        
 
         public void SaveChips()
         {
