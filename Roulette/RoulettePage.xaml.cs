@@ -7,7 +7,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
-using System.Windows;
 using System.ComponentModel;
 namespace Casino
 {
@@ -20,10 +19,12 @@ namespace Casino
         private ChipManagement chips;
         public int playerBetAmount;
         public MainWindow main;
+        public Animations anim;
 
         public RoulettePage(MainWindow mainWindow)
         {
             InitializeComponent();
+            
             main = mainWindow;
 
             // make everything gets shown correctly
@@ -149,13 +150,15 @@ namespace Casino
         }
 
         public bool ColorGame;
+        public bool activeRound = false;
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
+        {         
             if (BetAmountInput.Text == "BET")
             {
                 BetAmountInput.Text = "";
             }
             InputCorrector.Text = "";
+
             //Create all important variables for the upcoming codeblock
             string ColorChoice = "";
             var chipFund = (BetAmountInput.Text);
@@ -163,6 +166,22 @@ namespace Casino
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
             ColorGame = false;
+
+            //Make sure there's a stake put on the line
+            if (String.IsNullOrWhiteSpace(BetAmountInput.Text))
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Enter a bet!";
+                return;
+            }
+
+            //Block submits without color or number
+            if (String.IsNullOrWhiteSpace(PlayerNumber) && ColorGame == false)
+            {
+                InputCorrector.Text = "You have to choose what to bet on!";
+                InputCorrector.Visibility = Visibility.Visible;
+                return;
+            }
 
             //Forbid to go below 0
             int checkResult = chips.chipAmount - chipFunds;
@@ -188,9 +207,16 @@ namespace Casino
             {
                 ColorChoice = "black";
                 ColorGame = true;
-            }
-
+            }          
             
+            if (activeRound == true)
+            {
+                InputCorrector.Text = "Wait until the current round is over!";
+                InputCorrector.Visibility = Visibility.Visible;
+                return;
+            }
+            
+            activeRound = true; 
 
             Random rnd = new Random();
             //Spin the wheel on click
@@ -206,11 +232,14 @@ namespace Casino
                 Duration = TimeSpan.FromSeconds(2.5),
                 EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut },
             };
+
+            
             
             WheelSpin.Completed += (s, e) =>
             {
                 GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// playerBetAmount
                 GetBetType();
+                activeRound = false;
             };
 
             rotateTransform.BeginAnimation(RotateTransform.AngleProperty, WheelSpin);
