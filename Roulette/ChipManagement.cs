@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Text;
-using RouletteNew;
 
 namespace Casino
 {
@@ -33,8 +32,8 @@ namespace Casino
         public void SetChipAmount(bool gameWin, int betAmount, int PlayerNumber, string playerColor)
         {
             int prizeForWin = 0;
-            chipAmount -= betAmount;
-            ui.chipDisplay.Text = chipAmount.ToString();
+            //chipAmount -= betAmount;
+            //ui.chipDisplay.Text = chipAmount.ToString();
             Animations.PopOut(ui.chipDisplay);
             //after color bet
             bool ColorGame = ui.GetBetType();

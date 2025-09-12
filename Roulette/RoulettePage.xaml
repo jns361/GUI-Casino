@@ -41,7 +41,7 @@
                     Visibility="Hidden"/>
 
             <Border x:Name="ColorRed"
-                    Background="Red"
+                    Background="DarkRed"
                     Width="40" Height="40" Margin="52,372,282,146"/>
 
             <Image x:Name="chipAnimation" 
@@ -163,6 +163,7 @@
                      Background="Beige" 
                      Cursor="Hand"
                      Margin="0,333,0,0" IsTabStop="False"/>
+            
             <Button Content="RESET"  ClipToBounds="True"
                     HorizontalAlignment="Left" 
                     Margin="9,32,0,0" 
@@ -170,16 +171,67 @@
                     Click="ResetChips" 
                     Width="36" 
                     Height="21" IsTabStop="False" Grid.Row="1" />
+            
             <Image x:Name="boxAroundChips"
                    Width="96" Height="92"
                    Source="Visuals/oval.png" 
                    HorizontalAlignment="Right"
                    VerticalAlignment="Top"
                    Margin="0,0,109,0" RenderTransformOrigin="-0.878,0.472"/>
+            
             <Border Margin="381,24,111,490"
                     Background="Transparent"
                     CornerRadius="20"
                     Cursor="No"/>
+            
+            <Border x:Name="UserChoiceDisplay"
+                    Height="90" Width="75"
+                    BorderThickness="3" BorderBrush="Black"
+                    Background="#242625" Margin="100,175,405,293"/>
+            
+            <Border x:Name="ResultDisplay"
+                    Height="90" Width="75" 
+                    BorderThickness="3" BorderBrush="Black"
+                    Background="#242625" Margin="405,175,100,293"/>
+            
+            <Border x:Name="UserDisplayRed"
+                    Background="DarkRed"
+                    Height="80" Width="65"
+                    Margin="100,175,405,293"
+                    Visibility="Visible"
+                    Opacity="0"/>
+
+            <Border x:Name="UserDisplayGreen"
+                    Background="Green"
+                    Height="80" Width="65"
+                    Margin="100,175,405,293"
+                    Visibility="Visible"
+                    Opacity="0"/>
+
+            <Border x:Name="UserDisplayBlack"
+                    Background="Black"
+                    Height="80" Width="65"
+                    Margin="100,175,405,293"
+                    Visibility="Visible"
+                    Opacity="0"/>
+            
+            <Border x:Name="ResultDisplayRed"
+                    Background="DarkRed"
+                    Height="80" Width="65"
+                    Margin="405,175,100,293"
+                    Visibility="Hidden"/>
+
+            <Border x:Name="ResultDisplayGreen"
+                    Background="Green"
+                    Height="80" Width="65"
+                    Margin="405,175,100,293"
+                    Visibility="Hidden"/>
+
+            <Border x:Name="ResultDisplayBlack"
+                    Background="Black"
+                    Height="80" Width="65"
+                    Margin="405,175,100,293"
+                    Visibility="Hidden"/>
 
         </Grid>
     </Viewbox>

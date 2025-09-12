@@ -152,7 +152,8 @@ namespace Casino
         public bool ColorGame;
         public bool activeRound = false;
         private void Button_Click(object sender, RoutedEventArgs e)
-        {         
+        {
+            ResultDisplay.BorderBrush = Brushes.Black;
             if (BetAmountInput.Text == "BET")
             {
                 BetAmountInput.Text = "";
@@ -166,22 +167,6 @@ namespace Casino
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
             ColorGame = false;
-
-            //Make sure there's a stake put on the line
-            if (String.IsNullOrWhiteSpace(BetAmountInput.Text))
-            {
-                InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = "Enter a bet!";
-                return;
-            }
-
-            //Block submits without color or number
-            if (String.IsNullOrWhiteSpace(PlayerNumber) && ColorGame == false)
-            {
-                InputCorrector.Text = "You have to choose what to bet on!";
-                InputCorrector.Visibility = Visibility.Visible;
-                return;
-            }
 
             //Forbid to go below 0
             int checkResult = chips.chipAmount - chipFunds;
@@ -215,8 +200,31 @@ namespace Casino
                 InputCorrector.Visibility = Visibility.Visible;
                 return;
             }
-            
-            activeRound = true; 
+
+            //Make sure there's a stake put on the line
+            if (String.IsNullOrWhiteSpace(BetAmountInput.Text))
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Enter a bet!";
+                return;
+            }
+
+            //Block submits without color or number
+            if (String.IsNullOrWhiteSpace(PlayerNumber) && ColorGame == false)
+            {
+                InputCorrector.Text = "You have to choose what to bet on!";
+                InputCorrector.Visibility = Visibility.Visible;
+                return;
+            }
+
+            activeRound = true;
+            chips.chipAmount -= chipFunds;
+            chipDisplay.Text = chips.chipAmount.ToString();
+            DisplayUserColors(ColorChoice);
+
+            ResultDisplayRed.Visibility = Visibility.Hidden;
+            ResultDisplayGreen.Visibility = Visibility.Hidden;
+            ResultDisplayBlack.Visibility = Visibility.Hidden;
 
             Random rnd = new Random();
             //Spin the wheel on click
@@ -237,8 +245,8 @@ namespace Casino
             
             WheelSpin.Completed += (s, e) =>
             {
-                GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// playerBetAmount
                 GetBetType();
+                GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// 
                 activeRound = false;
             };
 
@@ -258,6 +266,7 @@ namespace Casino
             //If the user chose a color to play with, evaluate if he got the correct color or not
             if (ColorGame)
             {
+                DisplayResultColors(result.Color, ColorChoice);
                 if (game.CheckColorWin(ColorChoice, result.Color))
                 {
                     choiceAnnounce.Text = $"You win! You picked the color {ColorChoice}, " +
@@ -363,13 +372,12 @@ namespace Casino
 
         //Reset chips to the beginning by just changing savefile content
         private void ResetChips(object sender, RoutedEventArgs e)
-        {
+        { 
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
                 "Continue?",
                 MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-
                 string savePath = chips.savePath;
                 Console.WriteLine(savePath);
                 using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
@@ -378,8 +386,21 @@ namespace Casino
                 }
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
+
                 InputCorrector.Visibility = Visibility.Hidden;
                 choiceAnnounce.Text = "Enter your desired stake in the beige box!";
+
+                RedHover.Visibility = Visibility.Hidden;
+                BlackHover.Visibility = Visibility.Hidden;
+                GreenHover.Visibility = Visibility.Hidden;
+                ResultDisplay.BorderBrush = Brushes.Black;
+                UserDisplayRed.Visibility = Visibility.Hidden;
+                UserDisplayGreen.Visibility = Visibility.Hidden;
+                UserDisplayBlack.Visibility = Visibility.Hidden;
+                ResultDisplayRed.Visibility = Visibility.Hidden;
+                ResultDisplayGreen.Visibility = Visibility.Hidden;
+                ResultDisplayBlack.Visibility = Visibility.Hidden;
+
                 Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
                     $" backend amount: {chips.chipAmount}");
                 MessageBox.Show("Reset successful!", "Reset successful!");
@@ -467,5 +488,107 @@ namespace Casino
             main.ChipRain.BeginAnimation(UIElement.OpacityProperty, fadeIn);
             //Debug.WriteLine("Ended transition to main menu; ");
         }
+
+        private void DisplayUserColors(string colorChoice)
+        {
+            UserDisplayRed.Visibility = Visibility.Hidden;
+            UserDisplayRed.Opacity = 0.0;
+            UserDisplayGreen.Visibility = Visibility.Hidden;
+            UserDisplayGreen.Opacity = 0.0;
+            UserDisplayBlack.Visibility = Visibility.Hidden;
+            UserDisplayBlack.Opacity = 0.0;
+
+            Console.WriteLine("switched to Display");
+            DoubleAnimation fadeIn = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = TimeSpan.FromMilliseconds(250)
+            };
+            
+            if (colorChoice == "red")
+            {
+                UserDisplayRed.Visibility = Visibility.Visible;
+                UserDisplayRed.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+                //   UserDisplayRed.Visibility = Visibility.Visible;
+            }
+            else if (colorChoice == "black")
+            {
+                UserDisplayBlack.Visibility = Visibility.Visible;
+                UserDisplayBlack.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+                //UserDisplayBlack.Visibility = Visibility.Visible;
+            }
+            else if (colorChoice == "green")
+            {
+                UserDisplayGreen.Visibility = Visibility.Visible;
+                UserDisplayGreen.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+                //UserDisplayGreen.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void DisplayResultColors(string resultColor, string colorChoice)
+        {
+            ResultDisplayRed.Visibility = Visibility.Hidden;
+            ResultDisplayRed.Opacity = 0.0;
+            ResultDisplayGreen.Visibility = Visibility.Hidden;
+            ResultDisplayGreen.Opacity = 0.0;
+            ResultDisplayBlack.Visibility = Visibility.Hidden;
+            ResultDisplayBlack.Opacity = 0.0;
+
+            DoubleAnimation fadeIn = new DoubleAnimation
+            {
+                From = 0.0,
+                To = 1.0,
+                Duration = TimeSpan.FromMilliseconds(250)
+            };
+
+
+            if (resultColor == "red")
+            {
+                ResultDisplayRed.Visibility = Visibility.Visible;
+                ResultDisplayRed.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            } 
+            else if (resultColor == "black")
+            {
+                ResultDisplayBlack.Visibility = Visibility.Visible;
+                ResultDisplayBlack.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            }
+            else if (resultColor == "green")
+            {
+                ResultDisplayGreen.Visibility = Visibility.Visible;
+                ResultDisplayGreen.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            }
+
+            if (resultColor == colorChoice)
+            {
+                ResultDisplay.BorderBrush = (Brush?)new BrushConverter().ConvertFromString("#34eb34") ?? Brushes.Green;
+            }
+            else
+            {
+                ResultDisplay.BorderBrush = (Brush?)new BrushConverter().ConvertFromString("#c90404") ?? Brushes.Red;                               
+            }
+        }
+
+
+        /*private void ResetColorDisplays(string colorChoice)
+        {
+            DoubleAnimation fadeOut = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 0.0,
+                Duration = TimeSpan.FromMilliseconds(1)
+            };
+
+            UserDisplayRed.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            UserDisplayGreen.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            UserDisplayBlack.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            Console.WriteLine("Ended fadeOut");
+
+            fadeOut.Completed += (s, e) =>
+            {
+                Console.WriteLine("Noticed fadeOut end");
+                DisplayUserColors(colorChoice);
+            };
+        }*/
     }
 }
