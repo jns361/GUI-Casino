@@ -172,9 +172,10 @@ namespace Casino
 
         }
 
+        public int chipFundsUsed;
         public bool ColorGame;
         public bool activeRound = false;
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e) //SUBMIT button
         {
             ResultDisplay.BorderBrush = Brushes.Black;
             if (BetAmountInput.Text == "BET")
@@ -187,12 +188,13 @@ namespace Casino
             string ColorChoice = "";
             var chipFund = (BetAmountInput.Text);
             int.TryParse(chipFund, out int chipFunds);
+            chipFundsUsed = chipFunds;
             var PlayerNumber = (numberChoiceBox.Text);
             int.TryParse(PlayerNumber, out int PlayerNum);
             ColorGame = false;
 
             //Forbid to go below 0
-            int checkResult = chips.chipAmount - chipFunds;
+            int checkResult = chips.chipAmount - chipFundsUsed;
             if (checkResult < 0)
             {
                 InputCorrector.Visibility = Visibility.Visible;
@@ -241,7 +243,7 @@ namespace Casino
             }
 
             activeRound = true;
-            chips.chipAmount -= chipFunds;
+            chips.chipAmount -= chipFundsUsed;
             chipDisplay.Text = chips.chipAmount.ToString();
             DisplayUserColors(ColorChoice);
 
@@ -269,7 +271,7 @@ namespace Casino
             WheelSpin.Completed += (s, e) =>
             {
                 GetBetType();
-                GameLoop(ColorGame, ColorChoice, PlayerNum, chipFunds);// 
+                GameLoop(ColorGame, ColorChoice, PlayerNum, chipFundsUsed);// 
                 activeRound = false;
             };
 
@@ -396,9 +398,12 @@ namespace Casino
         //Reset chips to the beginning by just changing savefile content
         private void ResetChips(object sender, RoutedEventArgs e)
         { 
+            //PopUp to check if user really wants to reset
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
                 "Continue?",
                 MessageBoxButton.YesNo);
+
+            //If confirmed, reset chips to 1000, reset all animations (like hover effect) to normal
             if (result == MessageBoxResult.Yes)
             {
                 string savePath = chips.savePath;
@@ -410,8 +415,16 @@ namespace Casino
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
 
+                BetAmountInput.Text = "BET";
+                chipFundsUsed = 0;
+
                 InputCorrector.Visibility = Visibility.Hidden;
                 choiceAnnounce.Text = "Enter your desired stake in the beige box!";
+
+                colorRed.IsChecked = false;
+                colorGreen.IsChecked = false;
+                colorBlack.IsChecked = false;
+                NumberBetting.IsChecked = false;
 
                 RedHover.Visibility = Visibility.Hidden;
                 BlackHover.Visibility = Visibility.Hidden;
@@ -485,31 +498,31 @@ namespace Casino
 
         private void HomeMenu_Click(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("Starting window change to Home menu");
+            main.ChipRain.Visibility = Visibility.Visible;
+            main.ChipRain.Opacity = 0;
+
             DoubleAnimation fadeOut = new DoubleAnimation
             {
-                From = 1.0,
-                To = 0.0,
-                Duration = TimeSpan.FromSeconds(0.75)
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.55)
             };
 
+            RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+            
             DoubleAnimation fadeIn = new DoubleAnimation
             {
-                From = 0.0,
-                To = 1.0,
-                Duration = TimeSpan.FromSeconds(0.75)
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.55)
             };
 
-            fadeOut.Completed += (s, a) =>
+            fadeIn.Completed += (s, a) =>
             {
                 RouletteGrid.Visibility = Visibility.Hidden;
                 main.ChipRain.Visibility = Visibility.Visible;
             };
-
-            RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            //Debug.WriteLine("Starting fadeIn mainmenu");
             main.ChipRain.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-            //Debug.WriteLine("Ended transition to main menu; ");
         }
 
         private void DisplayUserColors(string colorChoice)
@@ -533,7 +546,7 @@ namespace Casino
             {
                 UserDisplayRed.Visibility = Visibility.Visible;
                 UserDisplayRed.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-                //   UserDisplayRed.Visibility = Visibility.Visible;
+                //UserDisplayRed.Visibility = Visibility.Visible;
             }
             else if (colorChoice == "black")
             {
@@ -591,27 +604,5 @@ namespace Casino
                 ResultDisplay.BorderBrush = (Brush?)new BrushConverter().ConvertFromString("#c90404") ?? Brushes.Red;                               
             }
         }
-
-
-        /*private void ResetColorDisplays(string colorChoice)
-        {
-            DoubleAnimation fadeOut = new DoubleAnimation
-            {
-                From = 1.0,
-                To = 0.0,
-                Duration = TimeSpan.FromMilliseconds(1)
-            };
-
-            UserDisplayRed.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            UserDisplayGreen.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            UserDisplayBlack.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            Console.WriteLine("Ended fadeOut");
-
-            fadeOut.Completed += (s, e) =>
-            {
-                Console.WriteLine("Noticed fadeOut end");
-                DisplayUserColors(colorChoice);
-            };
-        }*/
     }
 }

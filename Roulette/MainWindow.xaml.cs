@@ -16,6 +16,7 @@ namespace Casino
         public RoulettePage rlp;
         public int playerBetAmount;
         public MainWindow main;
+        public PokerPage pkp;
         
 
         public MainWindow()
@@ -26,7 +27,11 @@ namespace Casino
             rlp = new RoulettePage(this);
             rlp.Visibility = Visibility.Hidden;
 
+            pkp = new PokerPage(this);
+            pkp.Visibility = Visibility.Hidden;
+
             MainGrid.Children.Add(rlp);
+            MainGrid.Children.Add(pkp);
             //System.Diagnostics.Debug.WriteLine("This is a log.");
             //Disable number input field as long as the checkbox isn't ticked
             //chips.SaveChips(); Debug and testing line
@@ -52,17 +57,50 @@ namespace Casino
             rlp.RouletteGrid.Visibility = Visibility.Visible;
             rlp.RouletteGrid.Opacity = 0;
 
-            DoubleAnimation fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.75));
+            DoubleAnimation fadeIn = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.55)
+            };
             rlp.RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeIn);
 
-            DoubleAnimation fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(0.75));
-            ChipRain.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            
+            DoubleAnimation fadeOut = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.55)
+            };
             
             fadeOut.Completed += (s, a) =>
             {
                 ChipRain.Visibility = Visibility.Hidden;
             };
+            ChipRain.BeginAnimation(UIElement.OpacityProperty, fadeOut);
+        }
+
+        private void PokerButton_Click(object sender, RoutedEventArgs e)
+        {
+            pkp.Visibility = Visibility.Visible;
+            pkp.PokerGrid.Visibility = Visibility.Visible;
+            pkp.PokerGrid.Opacity = 0;
+
+            DoubleAnimation fadeIn = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromSeconds(0.55)
+            };
+            pkp.PokerGrid.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+
+            DoubleAnimation fadeOut = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromSeconds(0.55)
+            };
+            ChipRain.BeginAnimation (UIElement.OpacityProperty, fadeOut);
+
         }
     }
 }

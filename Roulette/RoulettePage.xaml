@@ -9,8 +9,8 @@
     <Viewbox>
         <Grid x:Name="RouletteGrid" Cursor="" Width="580" Background="#FFF9F6EE">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="0*"/>
+                <RowDefinition Height="650*"/>
+                <RowDefinition Height="47*"/>
             </Grid.RowDefinitions>
 
             <Image x:Name="wallpaper"
@@ -59,26 +59,27 @@
                      Width="62"
                      FontSize="17"
                      BorderThickness="0"
-                     IsReadOnly="True" Focusable="False" Background="#FFF9F6EE" RenderTransformOrigin="0.527,0.293" Height="23"/>
+                     IsReadOnly="True" Focusable="False" Background="#FFF9F6EE"
+                     RenderTransformOrigin="0.527,0.293" Height="23"/>
 
             <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="270" Margin="0,379,0,0">
 
                 <RadioButton x:Name="colorRed"
-                             Content="Red" Canvas.Top="-9"
+                             Content="Red" Canvas.Top="28"
                              Checked="ColorRed_Checked" IsTabStop="False" 
                              MouseEnter="ColorHover" MouseLeave="ColorNoHover"
-                             Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center"
+                             Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Top"
                              Background="Transparent" BorderBrush="Transparent" OpacityMask="Transparent"/>
                 <RadioButton x:Name="colorGreen" 
                              Content="" 
-                             Canvas.Left="115" Canvas.Top="-9"
+                             Canvas.Left="115" Canvas.Top="27"
                              Checked="ColorGreen_Checked" IsTabStop="False"
                              MouseEnter="ColorHover" MouseLeave="ColorNoHover"
-                             Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"
+                             Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Top"
                              Background="Transparent" BorderBrush="Transparent" OpacityMask="Transparent"/>
                 <RadioButton x:Name="colorBlack"
                              Content="" 
-                             Canvas.Left="230" Canvas.Top="-9"
+                             Canvas.Left="230" Canvas.Top="27"
                              Checked="ColorBlack_Checked" IsTabStop="False" 
                              MouseEnter="ColorHover" MouseLeave="ColorNoHover"
                              Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Top"
@@ -105,11 +106,9 @@
 
             <Button x:Name="backHome"
                     Content="Homemenu"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top" 
-                    Margin="109,30,0,0"
-                    Click="HomeMenu_Click" Height="20" Width="66"
-                    />
+                    HorizontalAlignment="Left" 
+                    Margin="109,0,0,577"
+                    Click="HomeMenu_Click" Width="66" Height="20" VerticalAlignment="Bottom"/>
 
             <CheckBox x:Name="NumberBetting" Content="Bet on Number" 
                       HorizontalAlignment="Center" 
@@ -159,11 +158,11 @@
 
             <Button Content="RESET"  ClipToBounds="True"
                     HorizontalAlignment="Left" 
-                    Margin="9,32,0,0" 
+                    Margin="30,606,0,0" 
                     VerticalAlignment="Top" 
                     Click="ResetChips" 
                     Width="36" 
-                    Height="21" IsTabStop="False" Grid.Row="1" />
+                    Height="20" IsTabStop="False" />
 
             <Image x:Name="boxAroundChips"
                    Width="96" Height="92"
@@ -225,12 +224,12 @@
                            Margin="84,218,486,335"
                            Text="YOUR"
                            RenderTransformOrigin="0.5, 0.5">
-                    <TextBlock.RenderTransform>
-                        <ScaleTransform ScaleX="1" ScaleY="1"/>
-                    </TextBlock.RenderTransform>                            
-                </TextBlock>
-                
-                <TextBlock x:Name="textBet"
+                <TextBlock.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+
+            <TextBlock x:Name="textBet"
                            TextAlignment="Center" 
                            FontSize="14" 
                            FontWeight="Bold" 
@@ -242,7 +241,7 @@
                     <ScaleTransform ScaleX="1" ScaleY="1"/>
                 </TextBlock.RenderTransform>
             </TextBlock>
-            
+
             <TextBlock x:Name="textRolled"
                            TextAlignment="Center" 
                            FontSize="11" 
