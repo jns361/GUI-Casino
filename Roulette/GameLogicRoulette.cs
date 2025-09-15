@@ -1,6 +1,6 @@
 ﻿namespace Casino
 {
-    public class GameLogic
+    public class GameLogicRoulette
     {
         //All numbers from the real roulette table that are paired with the color black
         private static readonly int[] WinColorBlack =

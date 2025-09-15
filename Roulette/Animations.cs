@@ -94,6 +94,33 @@ namespace Casino
             };
             timer.Start();
         }
+        public static void FontAnim(TextBlock target)
+        {
+            var scale = new DoubleAnimation
+            {
+                From = 1.0,
+                To = 1.2,
+                Duration = TimeSpan.FromMilliseconds(1125),
+                //Thread.Sleep(1130),
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever,                
+            
+            };
+            ((ScaleTransform)target.RenderTransform).BeginAnimation(ScaleTransform.ScaleXProperty, scale);
+            ((ScaleTransform)target.RenderTransform).BeginAnimation(ScaleTransform.ScaleYProperty, scale);
+            //textYour.BeginAnimation(TextBlock.FontSizeProperty, PopOut);
+            /*
+
+            DoubleAnimation GoLow = new DoubleAnimation
+            {
+                From = 14,
+                To = 11,
+                Duration = TimeSpan.FromMilliseconds(1125),
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+            textYour.BeginAnimation(TextBlock.FontSizeProperty, GoLow);
+            */
+        }
 
     }
 }

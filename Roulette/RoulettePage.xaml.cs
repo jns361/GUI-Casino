@@ -15,7 +15,7 @@ namespace Casino
     /// </summary>
     public partial class RoulettePage : UserControl
     {
-        private GameLogic game;
+        private GameLogicRoulette roulette;
         private ChipManagement chips;
         public int playerBetAmount;
         public MainWindow main;
@@ -24,7 +24,11 @@ namespace Casino
         public RoulettePage(MainWindow mainWindow)
         {
             InitializeComponent();
-            
+            textYour.Loaded += TextYour_Loaded;
+            textBet.Loaded += TextBet_Loaded;
+            textRolled.Loaded += TextRolled_Loaded;
+            textResult.Loaded += TextResult_Loaded;
+
             main = mainWindow;
 
             // make everything gets shown correctly
@@ -39,10 +43,29 @@ namespace Casino
             InputCorrector.Visibility = Visibility.Hidden;
         }
 
+        private void TextYour_Loaded(object sender, RoutedEventArgs e) 
+        {
+            Animations.FontAnim(textYour);
+        }
+
+        private void TextBet_Loaded(object sender, RoutedEventArgs e)
+        {
+            Animations.FontAnim(textBet);
+        }
+
+        private void TextRolled_Loaded(object sender, RoutedEventArgs e)
+        {
+            Animations.FontAnim(textRolled);
+        }
+        private void TextResult_Loaded(object sender, RoutedEventArgs e)
+        {
+            Animations.FontAnim(textResult);
+        }
+
         private void SetupGame()
         { 
-            game = new GameLogic();
-            chips = new ChipManagement(game, this);
+            roulette = new GameLogicRoulette();
+            chips = new ChipManagement(roulette, this);
             chipDisplay.Text = chips.chipAmount.ToString();
         }
 
@@ -262,12 +285,12 @@ namespace Casino
         {
             bool gameWin;
             //Call the WinGenerator method to generate a number and color
-            var result = game.WinGenerator();
+            var result = roulette.WinGenerator();
             //If the user chose a color to play with, evaluate if he got the correct color or not
             if (ColorGame)
             {
                 DisplayResultColors(result.Color, ColorChoice);
-                if (game.CheckColorWin(ColorChoice, result.Color))
+                if (roulette.CheckColorWin(ColorChoice, result.Color))
                 {
                     choiceAnnounce.Text = $"You win! You picked the color {ColorChoice}, " +
                         $"the color {result.Color} got rolled with the number {result.Number}";
@@ -284,7 +307,7 @@ namespace Casino
             //If the user chose a number to play with, evaluate if he got the correct number or not
             else
             {
-                if (game.CheckNumberWin(PlayerNumber, result.Number))
+                if (roulette.CheckNumberWin(PlayerNumber, result.Number))
                 {
                     choiceAnnounce.Text = $"You win! You picked the number {PlayerNumber}, " +
                         $"the number {result.Number} got rolled with the color {result.Color}";

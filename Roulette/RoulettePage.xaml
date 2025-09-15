@@ -9,8 +9,8 @@
     <Viewbox>
         <Grid x:Name="RouletteGrid" Cursor="" Width="580" Background="#FFF9F6EE">
             <Grid.RowDefinitions>
-                <RowDefinition Height="650*"/>
-                <RowDefinition Height="47*"/>
+                <RowDefinition/>
+                <RowDefinition Height="0*"/>
             </Grid.RowDefinitions>
 
             <Image x:Name="wallpaper"
@@ -18,31 +18,25 @@
                    Opacity="0" Margin="-270,-248,-270,-217" Grid.RowSpan="2"/>
 
             <Border x:Name="BlackHover"
-                    Background="Turquoise" Margin="280,369,50,145"
-                    Width="44" Height="44"
+                    Background="Turquoise" Margin="383,404,153,179"
                     Visibility="Hidden"/>
 
             <Border x:Name="ColorBlack"
-                    Background="Black"
-                    Width="40" Height="40" Margin="282,371,52,147"/>
+                    Background="Black" Margin="385,406,155,181"/>
 
             <Border x:Name="GreenHover" 
-                    Background="Turquoise" Margin="165,369,165,145"
-                    Width="44" Height="44"
+                    Background="Turquoise" Margin="268,404,268,179"
                     Visibility="Hidden"/>
 
             <Border x:Name="ColorGreen"
-                    Background="Green"
-                    Width="40" Height="40" Margin="167,371,167,147"/>
+                    Background="Green" Margin="270,406,270,181"/>
 
             <Border x:Name="RedHover"
-                    Background="Turquoise" Margin="50,370,280,144"
-                    Width="44" Height="44"
+                    Background="Turquoise" Margin="153,405,383,178"
                     Visibility="Hidden"/>
 
             <Border x:Name="ColorRed"
-                    Background="DarkRed"
-                    Width="40" Height="40" Margin="52,372,282,146"/>
+                    Background="DarkRed" Margin="155,407,385,180"/>
 
             <Image x:Name="chipAnimation" 
                     Width="49" Height="47" 
@@ -65,7 +59,7 @@
                      Width="62"
                      FontSize="17"
                      BorderThickness="0"
-                     IsReadOnly="True" Focusable="False" Background="#FFF9F6EE" RenderTransformOrigin="0.527,0.293"/>
+                     IsReadOnly="True" Focusable="False" Background="#FFF9F6EE" RenderTransformOrigin="0.527,0.293" Height="23"/>
 
             <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="270" Margin="0,379,0,0">
 
@@ -93,36 +87,36 @@
             <TextBox x:Name="numberChoiceBox" 
                      PreviewTextInput="CheckForLetters"
                      HorizontalAlignment="Center" 
-                     Margin="0,459,0,0" 
+                     Margin="0,508,0,0" 
                      TextWrapping="Wrap" 
                      VerticalAlignment="Top" 
                      Width="120" 
                      TextChanged="TextBox_TextChanged" 
                      SelectionOpacity="0.2" 
                      AllowDrop="False" 
-                     Background="#FFCAC6C6"/>
+                     Background="#FFCAC6C6" Height="18"/>
 
             <Button x:Name="submitButton" 
                     Content="Submit" 
                     HorizontalAlignment="Center" 
-                    Margin="0,500,0,0" 
+                    Margin="0,558,0,0" 
                     VerticalAlignment="Top" 
-                    Click="Button_Click" IsTabStop="False" />
+                    Click="Button_Click" IsTabStop="False" Height="20" Width="42" />
 
             <Button x:Name="backHome"
                     Content="Homemenu"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top" 
                     Margin="109,30,0,0"
-                    Click="HomeMenu_Click"
+                    Click="HomeMenu_Click" Height="20" Width="66"
                     />
 
             <CheckBox x:Name="NumberBetting" Content="Bet on Number" 
                       HorizontalAlignment="Center" 
-                      Margin="0,430,0,0" 
+                      Margin="0,488,0,0" 
                       VerticalAlignment="Top" 
                       Checked="NumberBetting_Checked" 
-                      Unchecked="NumberBetting_Unchecked" IsTabStop="False" />
+                      Unchecked="NumberBetting_Unchecked" IsTabStop="False" Height="15" Width="102" />
 
             <TextBlock x:Name="choiceAnnounce"
                        HorizontalAlignment="Center" 
@@ -132,15 +126,14 @@
                        FontSize="18"
                        VerticalAlignment="Top"
                        TextAlignment="Center"
-                       Width="362"/>
+                       Width="362" Height="24"/>
 
             <TextBox x:Name="InputCorrector"
                      HorizontalAlignment="Center" 
-                     Margin="0,528,0,0" 
+                     Margin="0,601,0,10" 
                      TextWrapping="Wrap" 
                      Text="" 
-                     TextAlignment="Center"
-                     VerticalAlignment="Top" 
+                     TextAlignment="Center" 
                      Width="226"
                      FontFamily="72 Black" 
                      BorderBrush="#FFF9F6EE" 
@@ -162,8 +155,8 @@
                      AllowDrop="False" 
                      Background="Beige" 
                      Cursor="Hand"
-                     Margin="0,333,0,0" IsTabStop="False"/>
-            
+                     Margin="0,333,0,0" IsTabStop="False" Height="18"/>
+
             <Button Content="RESET"  ClipToBounds="True"
                     HorizontalAlignment="Left" 
                     Margin="9,32,0,0" 
@@ -171,67 +164,112 @@
                     Click="ResetChips" 
                     Width="36" 
                     Height="21" IsTabStop="False" Grid.Row="1" />
-            
+
             <Image x:Name="boxAroundChips"
                    Width="96" Height="92"
                    Source="Visuals/oval.png" 
                    HorizontalAlignment="Right"
                    VerticalAlignment="Top"
                    Margin="0,0,109,0" RenderTransformOrigin="-0.878,0.472"/>
-            
+
             <Border Margin="381,24,111,490"
                     Background="Transparent"
                     CornerRadius="20"
                     Cursor="No"/>
-            
+
             <Border x:Name="UserChoiceDisplay"
-                    Height="90" Width="75"
                     BorderThickness="3" BorderBrush="Black"
-                    Background="#242625" Margin="100,175,405,293"/>
-            
-            <Border x:Name="ResultDisplay"
-                    Height="90" Width="75" 
+                    Background="#7393B3" Margin="100,210,405,327"/>
+
+            <Border x:Name="ResultDisplay" 
                     BorderThickness="3" BorderBrush="Black"
-                    Background="#242625" Margin="405,175,100,293"/>
-            
+                    Background="#7393B3" Margin="405,210,100,327"/>
+
             <Border x:Name="UserDisplayRed"
                     Background="DarkRed"
-                    Height="80" Width="65"
-                    Margin="100,175,405,293"
+                    Margin="105,215,410,332"
                     Visibility="Visible"
                     Opacity="0"/>
 
             <Border x:Name="UserDisplayGreen"
                     Background="Green"
-                    Height="80" Width="65"
-                    Margin="100,175,405,293"
+                    Margin="105,215,410,332"
                     Visibility="Visible"
                     Opacity="0"/>
 
             <Border x:Name="UserDisplayBlack"
                     Background="Black"
-                    Height="80" Width="65"
-                    Margin="100,175,405,293"
+                    Margin="105,215,410,332"
                     Visibility="Visible"
                     Opacity="0"/>
-            
+
             <Border x:Name="ResultDisplayRed"
                     Background="DarkRed"
-                    Height="80" Width="65"
-                    Margin="405,175,100,293"
+                    Margin="410,215,105,332"
                     Visibility="Hidden"/>
 
             <Border x:Name="ResultDisplayGreen"
                     Background="Green"
-                    Height="80" Width="65"
-                    Margin="405,175,100,293"
+                    Margin="410,215,105,332"
                     Visibility="Hidden"/>
 
             <Border x:Name="ResultDisplayBlack"
                     Background="Black"
-                    Height="80" Width="65"
-                    Margin="405,175,100,293"
+                    Margin="410,215,105,332"
                     Visibility="Hidden"/>
+            <TextBlock x:Name="textYour"
+                           TextAlignment="Center" 
+                           FontSize="14" 
+                           FontWeight="Bold" 
+                           TextWrapping="Wrap" 
+                           Margin="84,218,486,335"
+                           Text="YOUR"
+                           RenderTransformOrigin="0.5, 0.5">
+                    <TextBlock.RenderTransform>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    </TextBlock.RenderTransform>                            
+                </TextBlock>
+                
+                <TextBlock x:Name="textBet"
+                           TextAlignment="Center" 
+                           FontSize="14" 
+                           FontWeight="Bold" 
+                           TextWrapping="Wrap" 
+                           Margin="180,226,390,344"
+                           Text="BET"
+                           RenderTransformOrigin="0.5, 0.5">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            
+            <TextBlock x:Name="textRolled"
+                           TextAlignment="Center" 
+                           FontSize="11" 
+                           FontWeight="Bold" 
+                           TextWrapping="Wrap" 
+                           Margin="389,210,181,328"
+                           Text="ROLLED"
+                           RenderTransformOrigin="0.5, 0.5">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+
+            <TextBlock x:Name="textResult"
+                           TextAlignment="Center" 
+                           FontSize="11" 
+                           FontWeight="Bold" 
+                           TextWrapping="Wrap" 
+                           Margin="485,210,85,328"
+                           Text="RESULT"
+                           RenderTransformOrigin="0.5, 0.5">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+
+
 
         </Grid>
     </Viewbox>

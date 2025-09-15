@@ -5,7 +5,7 @@ namespace Casino
 {
     public class ChipManagement
     {
-        public readonly GameLogic game;
+        public readonly GameLogicRoulette roulette;
         public RoulettePage ui;
         public int chipAmount;// = 100;
 
@@ -18,9 +18,9 @@ namespace Casino
 
         public readonly string savePath;
 
-        public ChipManagement(GameLogic game, RoulettePage ui)
+        public ChipManagement(GameLogicRoulette game, RoulettePage ui)
         {
-            this.game = game;
+            this.roulette = roulette;
             this.ui= ui;
 
             savePath = Path.Combine(saveDirectory, "Savefile.txt");

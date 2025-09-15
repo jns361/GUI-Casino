@@ -13,7 +13,6 @@ namespace Casino
 
     public partial class MainWindow : Window
     {
-        //Make it possible to access GameLogic.cs
         public RoulettePage rlp;
         public int playerBetAmount;
         public MainWindow main;
