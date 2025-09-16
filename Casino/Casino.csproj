@@ -19,6 +19,7 @@
     <None Remove="Visuals\favicon%281%29.ico" />
     <None Remove="Visuals\GreenChip.png" />
     <None Remove="Visuals\oval.png" />
+    <None Remove="Visuals\Pokercards\pokercardSprite.png" />
     <None Remove="Visuals\RedChip.png" />
     <None Remove="Visuals\roulette.png" />
   </ItemGroup>
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <Resource Include="Visuals\background.png" />
+    <Resource Include="Visuals\Pokercards\pokercardSprite.png" />
     <Resource Include="Visuals\roulette.png" />
   </ItemGroup>
 

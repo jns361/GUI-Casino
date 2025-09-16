@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 using System.IO;
 using WpfAnimatedGif;
 using System.ComponentModel;
-
 namespace Casino
 {
     /// <summary>
@@ -29,12 +28,41 @@ namespace Casino
         public int playerBetAmount;
         public MainWindow main;
         public Animations anim;
+        public PokerCardSetup setcards;
+
+        private PokerDrawLogic draw = new PokerDrawLogic();
 
         public PokerPage(MainWindow mainWindow)
         {
             InitializeComponent();
 
             main = mainWindow;
+            /*
+            var hearts2 = PokerCardSetup.GetCardImage(PokerCardSetup.heart, PokerCardSetup.two);
+            var spadesK = PokerCardSetup.GetCardImage(PokerCardSetup.spades, PokerCardSetup.king);
+            var diamondsA = PokerCardSetup.GetCardImage(PokerCardSetup.diamonds, PokerCardSetup.ace);
+
+            CardPanel.Children.Add(new Image
+            {
+                Source = hearts2,
+                Width = 48,
+                Height = 68,
+                Margin = new Thickness(5)
+            });
+            CardPanel.Children.Add(new Image
+            {
+                Source = spadesK,
+                Width = 48,
+                Height = 68,
+                Margin = new Thickness(5)
+            });
+            CardPanel.Children.Add(new Image
+            {
+                Source = diamondsA,
+                Width = 48,
+                Height = 68,
+                Margin = new Thickness(5)
+            });*/
         }
 
         private void HomeMenu_Click(object sender, RoutedEventArgs e)
@@ -95,6 +123,24 @@ namespace Casino
             {
                 MessageBox.Show("Reset cancelled!", "Reset cancelled!");
             }
+
+
+        }
+
+        private void DrawCard(object sender, RoutedEventArgs e)
+        {
+            TestDisplayList.Text = string.Empty;
+            string pickedCard = draw.RandomCard();
+            foreach(string card in draw.pickedCards)
+            {
+                Console.WriteLine(card);
+            }
+            TestText.Text += pickedCard + "\n";
+            foreach (string card in draw.pickedCards)
+            {
+                TestDisplayList.Text += card + "\n";
+            }
+            
         }
     }
-    }
+}

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Casino"
              mc:Ignorable="d" 
              Height="650" Width="570">
-    
+
     <Viewbox>
         <Grid x:Name="PokerGrid" Height="650" Width="570" 
               Background="#FFF9F6EE">
@@ -17,7 +17,7 @@
                    HorizontalAlignment="Right"
                    VerticalAlignment="Top"
                    Margin="0,18,158,0"/>
-            
+
             <TextBox x:Name="chipDisplay" 
                      Margin="0,30,102,0" 
                      TextWrapping="Wrap"
@@ -50,6 +50,16 @@
                     Click="ResetChips" 
                     Width="36" 
                     Height="20" IsTabStop="False" />
+            
+            <Button Content="test" Height="20" Width="40"
+                    Click="DrawCard" Margin="265,315,265,315"/>
+
+            <TextBlock x:Name="TestText" Text="Test" Margin="198,132,234,366"/>
+
+            <StackPanel x:Name="CardPanel" Visibility ="Visible" Orientation="Horizontal" Margin="10">
+
+            </StackPanel>
+            <TextBlock x:Name="TestDisplayList" Text="Test" Margin="198,352,234,146"/>
         </Grid>
-    </Viewbox>    
+    </Viewbox>
 </UserControl>
