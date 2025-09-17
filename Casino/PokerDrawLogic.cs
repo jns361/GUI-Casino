@@ -8,10 +8,11 @@ namespace Casino
 {
     public class PokerDrawLogic
     {
-        private Random rdm = new Random();
+        public PokerPage pkp;
+        private Random rnd = new Random();
         public PokerCardSetup setcards;
 
-        public string heart = "h";
+        /*public string heart = "h";
         public string diamonds = "d";
         public string clubs = "c";
         public string spades = "s";
@@ -29,221 +30,42 @@ namespace Casino
         public string queen = "q";
         public string king = "k";
         public string ace = "a";
-
+        */
         public string pickedCard = "";
-        public List<string> pickedCards = new List<string>();
 
-        public string RandomCard()
+        public static List<string> allCards = new List<string>() { "heartsA", "hearts2", "hearts3", "hearts4", "hearts5", "hearts6", "hearts7", "hearts8", "hearts9", "hearts10", "heartsJ", "heartsQ",
+            "heartsK", "clubsA", "clubs2", "clubs3", "clubs4", "clubs5", "clubs6", "clubs7", "clubs8", "clubs9", "clubs10", "clubsJ", "clubsQ", "clubsK", "spadesA", "spades2", "spades3",
+            "spades4", "spades5", "spades6", "spades7", "spades8", "spades9", "spades10", "spadesJ", "spadesQ", "spadesK", "diamondsA", "diamonds2", "diamonds3", "diamonds4", "diamonds5",
+            "diamonds6", "diamonds7", "diamonds8", "diamonds9", "diamonds10", "diamondsJ", "diamondsQ", "diamondsK" };
+        public int cardDeckAmount = allCards.Count;
+
+        public static List<string> drawnDealerCards = new List<string>() { };
+        public static List<string> drawnCardsGeneral = new List<string>() { };
+
+        public static void ResetLists()
         {
-            while (true)
+            drawnDealerCards.Clear();
+            drawnCardsGeneral.Clear();
+        }
+
+        public string RandomCardDealer()
+        {
+            int index = rnd.Next(allCards.Count);
+            pickedCard = allCards[index];
+
+            if (drawnDealerCards.Count < 5)
             {
-                List<string> values = new List<string>()
-                {
-                    "a","2","3","4","5","6","7","8","9","10","j","q","k"
-                };
-
-                List<string> suits = new List<string>()
-                {
-                    "h", "c", "d", "s"
-                };
-
-                int index = rdm.Next(values.Count);
-                string pickedValue = values[index];
-
-                index = rdm.Next(suits.Count);
-                string pickedSuit = suits[index];
-
-                switch (pickedSuit)
-                {
-                    case "h":
-                        switch (pickedValue)
-                        {
-                            case "a":
-                                pickedCard = "heartsA";
-                                break;
-                            case "2":
-                                pickedCard = "hearts2";
-                                break;
-                            case "3":
-                                pickedCard = "hearts3";
-                                break;
-                            case "4":
-                                pickedCard = "hearts4";
-                                break;
-                            case "5":
-                                pickedCard = "hearts5";
-                                break;
-                            case "6":
-                                pickedCard = "hearts6";
-                                break;
-                            case "7":
-                                pickedCard = "hearts7";
-                                break;
-                            case "8":
-                                pickedCard = "hearts8";
-                                break;
-                            case "9":
-                                pickedCard = "hearts9";
-                                break;
-                            case "10":
-                                pickedCard = "hearts10";
-                                break;
-                            case "j":
-                                pickedCard = "heartsJ";
-                                break;
-                            case "q":
-                                pickedCard = "heartsQ";
-                                break;
-                            case "k":
-                                pickedCard = "heartsK";
-                                break;
-                        }
-                        break;
-                    case "c":
-                        switch (pickedValue)
-                        {
-                            case "a":
-                                pickedCard = "clubsA";
-                                break;
-                            case "2":
-                                pickedCard = "clubs2";
-                                break;
-                            case "3":
-                                pickedCard = "clubs3";
-                                break;
-                            case "4":
-                                pickedCard = "clubs4";
-                                break;
-                            case "5":
-                                pickedCard = "clubs5";
-                                break;
-                            case "6":
-                                pickedCard = "clubs6";
-                                break;
-                            case "7":
-                                pickedCard = "clubs7";
-                                break;
-                            case "8":
-                                pickedCard = "clubs8";
-                                break;
-                            case "9":
-                                pickedCard = "clubs9";
-                                break;
-                            case "10":
-                                pickedCard = "clubs10";
-                                break;
-                            case "j":
-                                pickedCard = "clubsJ";
-                                break;
-                            case "q":
-                                pickedCard = "clubsQ";
-                                break;
-                            case "k":
-                                pickedCard = "clubsK";
-                                break;
-                        }
-                        break;
-                    case "s":
-                        switch (pickedValue)
-                        {
-                            case "a":
-                                pickedCard = "spadesA";
-                                break;
-                            case "2":
-                                pickedCard = "spades2";
-                                break;
-                            case "3":
-                                pickedCard = "spades3";
-                                break;
-                            case "4":
-                                pickedCard = "spades4";
-                                break;
-                            case "5":
-                                pickedCard = "spades5";
-                                break;
-                            case "6":
-                                pickedCard = "spades6";
-                                break;
-                            case "7":
-                                pickedCard = "spades7";
-                                break;
-                            case "8":
-                                pickedCard = "spades8";
-                                break;
-                            case "9":
-                                pickedCard = "spades9";
-                                break;
-                            case "10":
-                                pickedCard = "spades10";
-                                break;
-                            case "j":
-                                pickedCard = "spadesJ";
-                                break;
-                            case "q":
-                                pickedCard = "spadesQ";
-                                break;
-                            case "k":
-                                pickedCard = "spadesK";
-                                break;
-                        }
-                        break;
-                    case "d":
-                        switch (pickedValue)
-                        {
-                            case "a":
-                                pickedCard = "diamondsA";
-                                break;
-                            case "2":
-                                pickedCard = "diamonds2";
-                                break;
-                            case "3":
-                                pickedCard = "diamonds3";
-                                break;
-                            case "4":
-                                pickedCard = "diamonds4";
-                                break;
-                            case "5":
-                                pickedCard = "diamonds5";
-                                break;
-                            case "6":
-                                pickedCard = "diamonds6";
-                                break;
-                            case "7":
-                                pickedCard = "diamonds7";
-                                break;
-                            case "8":
-                                pickedCard = "diamonds8";
-                                break;
-                            case "9":
-                                pickedCard = "diamonds9";
-                                break;
-                            case "10":
-                                pickedCard = "diamonds10";
-                                break;
-                            case "j":
-                                pickedCard = "diamondsJ";
-                                break;
-                            case "q":
-                                pickedCard = "diamondsQ";
-                                break;
-                            case "k":
-                                pickedCard = "diamondsK";
-                                break;
-                        }
-                        break;
-                }
-                
-                if (pickedCards.Contains(pickedCard))
-                {
-                    continue;
-                }
-                else
-                {
-                    pickedCards.Add(pickedCard);
-                    break;
-                }
+                drawnDealerCards.Add(pickedCard);
+                drawnCardsGeneral.Add(pickedCard);
+                allCards.Remove(pickedCard);
+                return pickedCard;
             }
-            return pickedCard;
+
+            else
+            {
+                pickedCard = "Reached max amount";
+                return pickedCard;
+            }
         }
     }
 }

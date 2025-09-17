@@ -25,6 +25,7 @@ namespace Casino
             ChipRain.Loaded += ChipRain_Loaded;
 
             rlp = new RoulettePage(this);
+            
             rlp.Visibility = Visibility.Hidden;
 
             pkp = new PokerPage(this);

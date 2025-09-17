@@ -8,6 +8,25 @@ namespace Casino
 {
     public class PokerCardSetup
     {
+        public PokerPage pkp;
+
+        public static (string suit, string value) SuitValueAssignment(string pickedCard)
+        {
+            if (pickedCard.StartsWith("hearts"))
+                return ("h", pickedCard.Substring("hearts".Length).ToLower());
+            
+            if (pickedCard.StartsWith("clubs"))
+                return ("c", pickedCard.Substring("clubs".Length).ToLower());
+
+            if (pickedCard.StartsWith("spades"))
+                return ("s", pickedCard.Substring("spades".Length).ToLower());
+
+            if (pickedCard.StartsWith("diamonds"))
+                return ("d", pickedCard.Substring("diamonds".Length).ToLower());
+
+            throw new ArgumentException("Invalid card name: " + pickedCard);
+        }
+
         public static ImageSource GetCardImage(string suit, string value)
         {
             var imageUri = new Uri("pack://application:,,,/Casino;component/Visuals/Pokercards/pokercardSprite.png", UriKind.Absolute);
@@ -79,6 +98,11 @@ namespace Casino
             var cropped = new CroppedBitmap(CardSheet, rect);
 
             return cropped;
+        }
+
+        public void DisplayCards()
+        {
+            
         }
     }
 }

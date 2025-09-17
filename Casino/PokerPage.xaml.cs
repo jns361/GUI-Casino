@@ -29,14 +29,13 @@ namespace Casino
         public MainWindow main;
         public Animations anim;
         public PokerCardSetup setcards;
-
-        private PokerDrawLogic draw = new PokerDrawLogic();
-
+        public PokerDrawLogic draw = new PokerDrawLogic();
+        
         public PokerPage(MainWindow mainWindow)
         {
             InitializeComponent();
-
             main = mainWindow;
+            chips = new ChipManagement(roulette, null);
             /*
             var hearts2 = PokerCardSetup.GetCardImage(PokerCardSetup.heart, PokerCardSetup.two);
             var spadesK = PokerCardSetup.GetCardImage(PokerCardSetup.spades, PokerCardSetup.king);
@@ -96,7 +95,7 @@ namespace Casino
             //Debug.WriteLine("Ended transition to main menu; ");
             }
 
-        private void ResetChips(object sender, RoutedEventArgs e)
+        private void ResetGame(object sender, RoutedEventArgs e)
         {
             //PopUp to check if user really wants to reset
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
@@ -104,14 +103,21 @@ namespace Casino
                 MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                string savePath = chips.savePath;
-                Console.WriteLine(savePath);
-                using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
+                string chipSavePath = chips.savePath;
+                Console.WriteLine(chipSavePath);
+                using (StreamWriter sw = new StreamWriter(chipSavePath, false, Encoding.ASCII))
                 {
                     sw.Write("1000");
                 }
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
+
+                PokerDrawLogic.ResetLists();
+                CardPanel.Children.Clear();
+
+                FirstDealerCards.IsEnabled = true;
+                FirstDealerCards.Visibility = Visibility.Visible;
+                NewDealerCard.IsEnabled = true;
 
                 Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
                     $" backend amount: {chips.chipAmount}");
@@ -127,20 +133,60 @@ namespace Casino
 
         }
 
-        private void DrawCard(object sender, RoutedEventArgs e)
+        private async void Draw3DealerCards(object sender, RoutedEventArgs e)
         {
-            TestDisplayList.Text = string.Empty;
-            string pickedCard = draw.RandomCard();
-            foreach(string card in draw.pickedCards)
+            for (int i = 0; i < 3; i++)
             {
-                Console.WriteLine(card);
+                string pickedCard = draw.RandomCardDealer();
+                if (pickedCard == "Reached max amount")
+                {
+                    NewDealerCard.IsEnabled = false;
+                    FirstDealerCards.IsEnabled = false;
+                    MessageBox.Show("Reached the maximum of dealer cards (5)");
+                    return;
+                }
+
+                TestText.Text += pickedCard + "\n";
+
+                (string suit, string value) = PokerCardSetup.SuitValueAssignment(pickedCard);
+                ImageSource source = PokerCardSetup.GetCardImage(suit, value);
+
+                Image img = new Image
+                {
+                    Source = source,
+                    Width = 48,
+                    Height = 64,
+                    Margin = new Thickness(5)
+                };
+                CardPanel.Children.Add(img);
+                await Task.Delay(320);
+            }
+            FirstDealerCards.IsEnabled = false;
+            FirstDealerCards.Visibility = Visibility.Collapsed;
+        }
+
+        private void DrawDealerCard(object sender, RoutedEventArgs e)
+        {
+            string pickedCard = draw.RandomCardDealer();
+            if (pickedCard == "Reached max amount")
+            {
+                NewDealerCard.IsEnabled = false;
+                MessageBox.Show("Reached the maximum of dealer cards (5)");
+                return;
             }
             TestText.Text += pickedCard + "\n";
-            foreach (string card in draw.pickedCards)
+
+            (string suit, string value) = PokerCardSetup.SuitValueAssignment(pickedCard);
+            ImageSource source = PokerCardSetup.GetCardImage(suit, value);
+
+            Image img = new Image
             {
-                TestDisplayList.Text += card + "\n";
-            }
-            
+                Source = source,
+                Width = 48,
+                Height = 64,
+                Margin = new Thickness(5)
+            };
+            CardPanel.Children.Add(img);
         }
     }
 }

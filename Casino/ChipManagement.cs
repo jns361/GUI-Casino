@@ -20,8 +20,8 @@ namespace Casino
 
         public ChipManagement(GameLogicRoulette game, RoulettePage ui)
         {
-            this.roulette = roulette;
-            this.ui= ui;
+            //this.roulette = roulette;
+            this.ui = ui;
 
             savePath = Path.Combine(saveDirectory, "Savefile.txt");
 

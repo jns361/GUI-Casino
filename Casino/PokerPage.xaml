@@ -47,19 +47,24 @@
                     HorizontalAlignment="Left" 
                     Margin="30,606,0,0" 
                     VerticalAlignment="Top" 
-                    Click="ResetChips" 
+                    Click="ResetGame" 
                     Width="36" 
                     Height="20" IsTabStop="False" />
+
+            <Button x:Name="NewDealerCard" Content="Dealer-Draw" Height="25" Width="80"
+                                Click="DrawDealerCard" Margin="245,449,245,161"/>
+            <Button x:Name="FirstDealerCards" Content="Dealer Draw" Height="25" Width="80"
+                    Click="Draw3DealerCards" Margin="245,449,245,161" />
             
-            <Button Content="test" Height="20" Width="40"
-                    Click="DrawCard" Margin="265,315,265,315"/>
 
             <TextBlock x:Name="TestText" Text="Test" Margin="198,132,234,366"/>
 
-            <StackPanel x:Name="CardPanel" Visibility ="Visible" Orientation="Horizontal" Margin="10">
+            <StackPanel x:Name="CardPanel" Visibility ="Visible" Orientation="Horizontal" Height="75" Width="285">
 
             </StackPanel>
-            <TextBlock x:Name="TestDisplayList" Text="Test" Margin="198,352,234,146"/>
+            
+            
+            
         </Grid>
     </Viewbox>
 </UserControl>
