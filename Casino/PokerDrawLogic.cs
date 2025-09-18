@@ -39,8 +39,9 @@ namespace Casino
             "diamonds6", "diamonds7", "diamonds8", "diamonds9", "diamonds10", "diamondsJ", "diamondsQ", "diamondsK" };
         public int cardDeckAmount = allCards.Count;
 
-        public static List<string> drawnDealerCards = new List<string>() { };
-        public static List<string> drawnCardsGeneral = new List<string>() { };
+        public static List<string> drawnDealerCards = new List<string>();
+        public static List<string> drawnCardsGeneral = new List<string>();
+        public static List<string> drawnPlayerCards = new List<string>();
 
         public static void ResetLists()
         {
@@ -67,5 +68,27 @@ namespace Casino
                 return pickedCard;
             }
         }
+
+        public string RandomCardPlayer()
+        {
+            int index = rnd.Next(allCards.Count);
+            pickedCard = allCards[index];
+
+
+            if (drawnPlayerCards.Count < 2)
+            {
+                drawnPlayerCards.Add(pickedCard);
+                drawnCardsGeneral.Add(pickedCard);
+                allCards.Remove(pickedCard);
+                return pickedCard;
+            }
+
+            else
+            {
+                pickedCard = "done";
+                return pickedCard;
+            }
+        }
     }
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                

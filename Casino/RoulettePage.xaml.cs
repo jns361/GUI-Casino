@@ -63,6 +63,7 @@ namespace Casino
         }
 
         private void SetupGame()
+
         { 
             roulette = new GameLogicRoulette();
             chips = new ChipManagement(roulette, this);

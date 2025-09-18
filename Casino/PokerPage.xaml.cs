@@ -118,6 +118,7 @@ namespace Casino
                 FirstDealerCards.IsEnabled = true;
                 FirstDealerCards.Visibility = Visibility.Visible;
                 NewDealerCard.IsEnabled = true;
+                PlayerDraw.IsEnabled = true;
 
                 Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
                     $" backend amount: {chips.chipAmount}");
@@ -188,5 +189,34 @@ namespace Casino
             };
             CardPanel.Children.Add(img);
         }
-    }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                string pickedCard = draw.RandomCardPlayer();
+                if (pickedCard == "done")
+                {
+                    PlayerDraw.IsEnabled = false;
+                    return;
+                }
+                TestText.Text += $"PlayerCard: {pickedCard}" + "\n";
+
+                (string suit, string value) = PokerCardSetup.SuitValueAssignment(pickedCard);
+                ImageSource source = PokerCardSetup.GetCardImage(suit, value);
+
+                Image img = new Image
+                {
+                    Source = source,
+                    Width = 48,
+                    Height = 64,
+                    Margin = new Thickness(5)
+                };
+                PlayerCardPanel.Children.Add(img);
+                await Task.Delay(320);
+            }
+            PlayerDraw.IsEnabled = false;
+        }
+     }
 }
+
