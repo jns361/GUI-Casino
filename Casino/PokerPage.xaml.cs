@@ -36,6 +36,11 @@ namespace Casino
             InitializeComponent();
             main = mainWindow;
             chips = new ChipManagement(roulette, null);
+
+            // Initialize handResult using an instance of PokerHandsCheck
+            var handsCheck = new PokerHandsCheck();
+            handResult = handsCheck.HandWinCheck();
+
             /*
             var hearts2 = PokerCardSetup.GetCardImage(PokerCardSetup.heart, PokerCardSetup.two);
             var spadesK = PokerCardSetup.GetCardImage(PokerCardSetup.spades, PokerCardSetup.king);
@@ -63,6 +68,12 @@ namespace Casino
                 Margin = new Thickness(5)
             });*/
         }
+
+        // Replace this line:
+        // public string handResult = PokerHandsCheck.HandWinCheck();
+
+        // With the following code to fix CS0120:
+        public string handResult;
 
         private void HomeMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -216,6 +227,10 @@ namespace Casino
                 await Task.Delay(320);
             }
             PlayerDraw.IsEnabled = false;
+
+            TestText.Text += handResult;
+            
+            //GEWINNERMITTLUNG FUNKTIONIERT NOCH NICHT RICHTIG
         }
      }
 }

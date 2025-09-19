@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Casino
 {
@@ -76,77 +77,190 @@ namespace Casino
                 throw new ArgumentException("Invalid card name: " + pickedCard);
             }
         }
+        List<string> combinedValues = new List<string>();
+        List<string> combinedSuits = new List<string>();
+        Dictionary<string, int> valueNumberAssign = new Dictionary<string, int>()
+        {
+            
+            { "2", 2 },
+            { "3", 3 },
+            { "4", 4 },
+            { "5", 5 },
+            { "6", 6 },
+            { "7", 7 },
+            { "8", 8 },
+            { "9", 9 },
+            { "10", 10 },
+            { "j", 11 },
+            { "q", 12 },
+            { "k", 13 },
+            { "a", 14 }
+        };
+        List<int> assignedValueNums = new List<int>();
+        List<int> assignedValsNoDupes = new List<int>();
 
         public string HandWinCheck()
         {
-            int playerHeartsAmount = 0;
-            int playerClubsAmount = 0;
-            int playerSpadesAmount = 0;
-            int playerDiamondsAmount = 0;
-            foreach (string suit in playerSuits)
+            combinedValues.Clear();
+            combinedSuits.Clear();
+            combinedValues.AddRange(playerValues);
+            combinedValues.AddRange(dealerValues);
+
+            var valueCount = new Dictionary<string, int>();
+
+            foreach (var value in combinedValues)
             {
-                switch (suit)
+                if (!valueCount.ContainsKey(value))
                 {
-                    case "hearts":
-                        playerHeartsAmount += 1;
-                        break;
-                    case "clubs":
-                        playerClubsAmount += 1;
-                        break; ;
-                    case "spades":
-                        playerSpadesAmount += 1;
-                        break;
-                    case "diamonds":
-                        playerDiamondsAmount += 1;
-                        break;
+                    valueCount[value] = 0;
+                }
+                valueCount[value]++;
+                
+                if (valueNumberAssign.ContainsKey(value.ToLower()))
+                {
+                    assignedValueNums.Add(valueNumberAssign[value.ToLower()]);
+                }
+                else
+                {
+                    throw new Exception("Unknown card value: " + value);
                 }
             }
+            assignedValsNoDupes.AddRange(assignedValueNums.Distinct().ToList());
+            assignedValsNoDupes.Sort();
 
-            int dealerHeartsAmount = 0;
-            int dealerClubsAmount = 0;
-            int dealerSpadesAmount = 0;
-            int dealerDiamondsAmount = 0;
-            foreach (string suit in dealerSuits)
+            combinedSuits.AddRange(playerSuits);
+            combinedSuits.AddRange(dealerSuits);
+
+            var suitCount = new Dictionary<string, int>();
+
+            foreach (var suit in combinedSuits)
             {
-                switch (suit)
+                if (!suitCount.ContainsKey(suit))
                 {
-                    case "hearts":
-                        dealerHeartsAmount += 1;
-                        break;
-                    case "clubs":
-                        dealerClubsAmount += 1;
-                        break;
-                    case "spades":
-                        dealerSpadesAmount += 1;
-                        break;
-                    case "diamonds":
-                        dealerDiamondsAmount += 1;
-                        break;
+                    suitCount[suit] = 0;
                 }
+                suitCount[suit]++;
             }
 
-            int DealerPlayerHeartsSum = dealerHeartsAmount + playerHeartsAmount;
-            int DealerPlayerClubsSum = dealerClubsAmount + playerClubsAmount;
-            int DealerPlayerSpadesSum = dealerSpadesAmount + playerSpadesAmount;
-            int DealerPlayerDiamondsSum = dealerDiamondsAmount + playerDiamondsAmount;
+            bool straightCheck = StraightCheck();
 
             string handResult = "";
 
-            /*RoyalFlush*/
-            /*StraightFlush*/
-            if (DealerPlayerHeartsSum == 5 || DealerPlayerClubsSum == 5 || DealerPlayerSpadesSum == 5 || DealerPlayerDiamondsSum == 5)
+            string flushSuit = null;
+            foreach (var suit in suitCount.Keys)
             {
-                handResult = "flush";
+                if (suitCount[suit] >= 5)
+                {
+                    flushSuit = suit;
+                    break;
+                }
+            }
+
+            bool royalFlush = false;
+            if (flushSuit != null)
+            {
+                List<string> flushValues = new List<string>();
+                for (int i = 0; i < combinedValues.Count; i++)
+                {
+                    if (combinedSuits[i] == flushSuit)
+                    {
+                        flushValues.Add(combinedValues[i].ToLower());
+                    }
+                    string[] royalValues = { "10", "j", "q", "k", "a" };
+                    royalFlush = royalValues.All(val => flushValues.Contains(val));
+                }
+            }
+            if (royalFlush)
+            {
+                handResult = "RoyalFlush";
                 return handResult;
             }
 
+            else if (suitCount.Values.Any(count => count >= 5) && straightCheck == true)
+            {
+                handResult = "StraightFlush";
+                return handResult;
+            }
+
+            else if (suitCount.Values.Any(count => count >= 5) && straightCheck == true)
+            {
+                handResult = "StraightFlush";
+                return handResult;
+            }
+
+            else if (valueCount.Values.Any(count => count >= 4))
+            {
+                handResult = "FourOfAKind";
+                return handResult;
+            }
+
+            else if (valueCount.Values.Any(count => count >= 3) && valueCount.Values.Any(count => count >= 2))
+            {
+                handResult = "FullHouse";
+                return handResult;
+            }
+
+            else if (suitCount.Values.Any(count => count >= 5))
+            {
+                handResult = "Flush";
+                return handResult;
+            }
+
+            else if (straightCheck == true)
+            {
+                handResult = "Straight";
+                return handResult;
+            }
+
+            else if (valueCount.Values.Any(count => count >= 3))
+            {
+                handResult = "ThreeOfAKind";
+                return handResult;
+            }
+
+            else if (valueCount.Values.Any(count => count >= 2) && valueCount.Values.Any(count => count >= 2))
+            {
+                handResult = "TwoPair";
+                return handResult;
+            }
+
+            else if (valueCount.Values.Any(count => count >= 2))
+            {
+                handResult = "Pair";
+                return handResult;
+            }
 
             else
             {
-                handResult = "lose";
+                handResult = "Highcard";
                 return handResult;
             }
 
+        }
+
+        public bool StraightCheck()
+        {
+            bool straightCheck = false;
+
+            int consecutiveCount = 1;
+            for (int i = 1; i < assignedValsNoDupes.Count; i++)
+            {
+                consecutiveCount++;
+                if (assignedValsNoDupes[i] == assignedValsNoDupes[i - 1 ] + 1)
+                {
+                    if (consecutiveCount >= 5)
+                    {
+                        straightCheck = true;
+                        return straightCheck;
+                    }
+                    
+                }
+                else
+                {
+                    consecutiveCount = 1;
+                }
+            }
+            return straightCheck;
         }
     }
 }
