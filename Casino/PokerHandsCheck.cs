@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Casino
 {
     
-    internal class PokerHandsCheck
+    public class PokerHandsCheck
     {
         public PokerPage pkp;
         public static PokerDrawLogic draw;
@@ -28,9 +28,6 @@ namespace Casino
         
         public List<string> playerCards = new List<string>();
         public List<string> dealerCards = new List<string>();
-
-        public string playerCard = "";
-        public string dealerCard = "";
 
         public void ComparePreparation()
         {
@@ -77,9 +74,10 @@ namespace Casino
                 throw new ArgumentException("Invalid card name: " + pickedCard);
             }
         }
-        List<string> combinedValues = new List<string>();
-        List<string> combinedSuits = new List<string>();
-        Dictionary<string, int> valueNumberAssign = new Dictionary<string, int>()
+        public List<string> combinedValues = new List<string>();
+        public List<string> combinedSuits = new List<string>();
+        public List<string> flushValues = new List<string>();
+        public Dictionary<string, int> valueNumberAssign = new Dictionary<string, int>()
         {
             
             { "2", 2 },
@@ -96,11 +94,12 @@ namespace Casino
             { "k", 13 },
             { "a", 14 }
         };
-        List<int> assignedValueNums = new List<int>();
-        List<int> assignedValsNoDupes = new List<int>();
+        public List<int> assignedValueNums = new List<int>();
+        public List<int> assignedValsNoDupes = new List<int>();
 
         public string HandWinCheck()
         {
+            ComparePreparation();
             combinedValues.Clear();
             combinedSuits.Clear();
             combinedValues.AddRange(playerValues);
@@ -146,6 +145,20 @@ namespace Casino
 
             string handResult = "";
 
+            var triples = valueCount.Where(kv => kv.Value == 3).Select(kv => kv.Key).ToList();
+            var pairs = valueCount.Where(kv => kv.Value == 2).Select(kv => kv.Key).ToList();
+
+            bool fullHouse = false;
+
+            foreach (var triple in triples)
+            {
+                if (pairs.Any(p => p != triple))
+                {
+                    fullHouse = true;
+                    break;
+                }
+            }
+
             string flushSuit = null;
             foreach (var suit in suitCount.Keys)
             {
@@ -157,9 +170,9 @@ namespace Casino
             }
 
             bool royalFlush = false;
+            
             if (flushSuit != null)
             {
-                List<string> flushValues = new List<string>();
                 for (int i = 0; i < combinedValues.Count; i++)
                 {
                     if (combinedSuits[i] == flushSuit)
@@ -194,7 +207,7 @@ namespace Casino
                 return handResult;
             }
 
-            else if (valueCount.Values.Any(count => count >= 3) && valueCount.Values.Any(count => count >= 2))
+            else if (fullHouse)
             {
                 handResult = "FullHouse";
                 return handResult;
@@ -218,7 +231,7 @@ namespace Casino
                 return handResult;
             }
 
-            else if (valueCount.Values.Any(count => count >= 2) && valueCount.Values.Any(count => count >= 2))
+            else if (valueCount.Values.Count(count => count >= 2) >= 2)
             {
                 handResult = "TwoPair";
                 return handResult;
@@ -261,6 +274,20 @@ namespace Casino
                 }
             }
             return straightCheck;
+        }
+        public void ResetLists()
+        {
+            dealerCards.Clear();
+            playerCards.Clear();
+            combinedValues.Clear();
+            combinedSuits.Clear();
+            assignedValsNoDupes.Clear();
+            assignedValueNums.Clear();
+            flushValues.Clear();
+            playerValues.Clear();
+            dealerValues.Clear();
+            playerSuits.Clear();
+            dealerSuits.Clear();
         }
     }
 }

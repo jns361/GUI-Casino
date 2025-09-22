@@ -54,16 +54,22 @@
             <Button x:Name="NewDealerCard" Content="Dealer-Draw" Height="25" Width="80"
                                 Click="DrawDealerCard" Margin="245,449,245,161"/>
             <Button x:Name="FirstDealerCards" Content="Dealer Draw" Height="25" Width="80"
-                    Click="Draw3DealerCards" Margin="245,449,245,161" />
+                    Click="Draw3DealerCards" Margin="245,449,245,161" 
+                    IsEnabled="False"/>
             <Button x:Name="PlayerDraw" Content="PlayerDraw"  Width="80" Height="25"
                     Click="Button_Click" Margin="0,486,0,138"/>
 
 
-            <TextBlock x:Name="TestText" Text="Test" Margin="198,110,234,388"/>
+            <TextBlock x:Name="TestText" Margin="216,108,216,489"/>
 
-            <StackPanel x:Name="CardPanel" Visibility ="Visible" Orientation="Horizontal" Height="75" Width="285"/>
+            <StackPanel x:Name="CardPanel" Visibility ="Visible"
+                        Orientation="Horizontal" Height="85" Margin="142,282,133,282"/>
 
-            <StackPanel x:Name="PlayerCardPanel" Visibility="Visible" Orientation="Horizontal" Height="75" Width="114" Margin="228,526,228,48"/>
+            <StackPanel x:Name="PlayerCardPanel" Visibility="Visible" Orientation="Horizontal" Width="200" Margin="228,526,142,0"/>
+
+            <Button x:Name="NewRound" Content="New Round" HorizontalAlignment="Center" 
+                    Margin="0,411,0,0" VerticalAlignment="Top" Click="StartNewRound"
+                    Visibility="Collapsed"/>
 
 
 

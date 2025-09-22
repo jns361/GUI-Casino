@@ -108,7 +108,7 @@ namespace Casino
             //Check if entered bet amount is a valid integer
             if (int.TryParse(BetAmountInput.Text, out int value))
             {
-                int chipAmount = chips.GetChipAmount();
+                int chipAmount = chips.ChipAmount;
                 if (value > chipAmount)
                 {
                     InputCorrector.Visibility = Visibility.Visible;

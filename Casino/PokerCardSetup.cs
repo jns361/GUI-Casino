@@ -43,10 +43,10 @@ namespace Casino
                 case "d":
                     row = 1;
                     break;
-                case "c":
+                case "s":
                     row = 2;
                     break;
-                case "s":
+                case "c":
                     row = 3;
                     break;
             }
@@ -98,11 +98,6 @@ namespace Casino
             var cropped = new CroppedBitmap(CardSheet, rect);
 
             return cropped;
-        }
-
-        public void DisplayCards()
-        {
-            
         }
     }
 }

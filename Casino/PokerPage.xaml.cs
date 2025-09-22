@@ -30,17 +30,18 @@ namespace Casino
         public Animations anim;
         public PokerCardSetup setcards;
         public PokerDrawLogic draw = new PokerDrawLogic();
-        
+        public PokerHandsCheck checkwin;
+
         public PokerPage(MainWindow mainWindow)
         {
             InitializeComponent();
             main = mainWindow;
-            chips = new ChipManagement(roulette, null);
+            checkwin = new PokerHandsCheck();
+            chips = new ChipManagement(null, null);
+            chipDisplay.Text = chips.chipAmount.ToString();
 
-            // Initialize handResult using an instance of PokerHandsCheck
+        // Initialize handResult using an instance of PokerHandsCheck
             var handsCheck = new PokerHandsCheck();
-            handResult = handsCheck.HandWinCheck();
-
             /*
             var hearts2 = PokerCardSetup.GetCardImage(PokerCardSetup.heart, PokerCardSetup.two);
             var spadesK = PokerCardSetup.GetCardImage(PokerCardSetup.spades, PokerCardSetup.king);
@@ -69,11 +70,11 @@ namespace Casino
             });*/
         }
 
+
         // Replace this line:
         // public string handResult = PokerHandsCheck.HandWinCheck();
 
         // With the following code to fix CS0120:
-        public string handResult;
 
         private void HomeMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -123,18 +124,24 @@ namespace Casino
                 chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
 
+                PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
+                
                 PokerDrawLogic.ResetLists();
                 CardPanel.Children.Clear();
+                PlayerCardPanel.Children.Clear();
 
                 FirstDealerCards.IsEnabled = true;
                 FirstDealerCards.Visibility = Visibility.Visible;
                 NewDealerCard.IsEnabled = true;
                 PlayerDraw.IsEnabled = true;
+                draw.pickedCard = "";
 
+                checkwin.ResetLists();
+                TestText.Text = "";
+                
                 Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
                     $" backend amount: {chips.chipAmount}");
                 MessageBox.Show("Reset successful!", "Reset successful!");
-
             }
 
             else
@@ -158,8 +165,6 @@ namespace Casino
                     return;
                 }
 
-                TestText.Text += pickedCard + "\n";
-
                 (string suit, string value) = PokerCardSetup.SuitValueAssignment(pickedCard);
                 ImageSource source = PokerCardSetup.GetCardImage(suit, value);
 
@@ -170,12 +175,26 @@ namespace Casino
                     Height = 64,
                     Margin = new Thickness(5)
                 };
-                CardPanel.Children.Add(img);
+                StackPanel cardWithLabel = new StackPanel();
+                cardWithLabel.Children.Add(img);
+                img.VerticalAlignment = VerticalAlignment.Top;
+                img.Height = 64; img.Width = 48;
+
+                TextBlock label = new TextBlock();
+                label.Text = pickedCard;
+                label.FontSize = 12;
+                label.FontFamily = new FontFamily("Baskerville Old Face");
+                label.TextAlignment = TextAlignment.Center;
+                cardWithLabel.Children.Add(label);
+                                
+                CardPanel.Children.Add(cardWithLabel);
                 await Task.Delay(320);
             }
             FirstDealerCards.IsEnabled = false;
             FirstDealerCards.Visibility = Visibility.Collapsed;
         }
+
+        bool firstClick = true;
 
         private void DrawDealerCard(object sender, RoutedEventArgs e)
         {
@@ -186,7 +205,6 @@ namespace Casino
                 MessageBox.Show("Reached the maximum of dealer cards (5)");
                 return;
             }
-            TestText.Text += pickedCard + "\n";
 
             (string suit, string value) = PokerCardSetup.SuitValueAssignment(pickedCard);
             ImageSource source = PokerCardSetup.GetCardImage(suit, value);
@@ -198,20 +216,36 @@ namespace Casino
                 Height = 64,
                 Margin = new Thickness(5)
             };
-            CardPanel.Children.Add(img);
+
+            StackPanel cardWithLabel = new StackPanel();
+            img.Width = 48; img.Height = 64;
+            cardWithLabel.Children.Add(img);
+            TextBlock label = new TextBlock();
+            label.Text = pickedCard;
+            label.FontSize = 12;
+            label.FontFamily = new FontFamily("Baskerville Old Face");
+            label.TextAlignment = TextAlignment.Center;
+            cardWithLabel.Children.Add(label);
+
+            CardPanel.Children.Add(cardWithLabel);
+
+            if (firstClick == false)
+            {
+                string handResult = checkwin.HandWinCheck();
+                TestText.TextAlignment = TextAlignment.Center;
+                TestText.Text += handResult;
+                NewRound.Visibility = Visibility.Visible;
+            }
+            firstClick = false;
         }
+
+        
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < 2; i++)
             {
                 string pickedCard = draw.RandomCardPlayer();
-                if (pickedCard == "done")
-                {
-                    PlayerDraw.IsEnabled = false;
-                    return;
-                }
-                TestText.Text += $"PlayerCard: {pickedCard}" + "\n";
 
                 (string suit, string value) = PokerCardSetup.SuitValueAssignment(pickedCard);
                 ImageSource source = PokerCardSetup.GetCardImage(suit, value);
@@ -223,15 +257,51 @@ namespace Casino
                     Height = 64,
                     Margin = new Thickness(5)
                 };
-                PlayerCardPanel.Children.Add(img);
-                await Task.Delay(320);
-            }
-            PlayerDraw.IsEnabled = false;
 
-            TestText.Text += handResult;
-            
-            //GEWINNERMITTLUNG FUNKTIONIERT NOCH NICHT RICHTIG
+                StackPanel cardWithLabel = new StackPanel();
+                cardWithLabel.Orientation = Orientation.Vertical;
+
+                cardWithLabel.Children.Add(img);
+                img.VerticalAlignment = VerticalAlignment.Top;
+                img.Height = 64; img.Width = 48;
+                TextBlock label = new TextBlock();
+                label.Text = pickedCard;
+                label.FontSize = 12;
+                cardWithLabel.Children.Add(label);
+
+                label.FontFamily = new FontFamily("Baskerville Old Face");
+                label.TextAlignment = TextAlignment.Center;
+
+                PlayerCardPanel.Children.Add(cardWithLabel);
+                await Task.Delay(300);
+            }
+            FirstDealerCards.IsEnabled = true;
+            PlayerDraw.IsEnabled = false;
         }
-     }
+
+        private void StartNewRound(object sender, RoutedEventArgs e)
+        {
+            PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
+            NewRound.Visibility = Visibility.Collapsed;
+            string chipSavePath = chips.savePath;
+            Console.WriteLine(chipSavePath);
+
+            FirstDealerCards.IsEnabled = false;
+            FirstDealerCards.Visibility = Visibility.Visible;
+
+            PokerDrawLogic.ResetLists();
+            CardPanel.Children.Clear();
+            PlayerCardPanel.Children.Clear();
+
+            NewDealerCard.IsEnabled = true;
+            PlayerDraw.IsEnabled = true;
+            draw.pickedCard = "";
+
+            firstClick = true;
+
+            checkwin.ResetLists();
+            TestText.Text = "";
+        }
+    }
 }
 
