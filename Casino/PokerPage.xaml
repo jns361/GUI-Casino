@@ -51,28 +51,56 @@
                     Width="36" 
                     Height="20" IsTabStop="False" />
 
-            <Button x:Name="NewDealerCard" Content="Dealer-Draw" Height="25" Width="80"
-                                Click="DrawDealerCard" Margin="245,449,245,161"/>
-            <Button x:Name="FirstDealerCards" Content="Dealer Draw" Height="25" Width="80"
+            <Button x:Name="NewDealerCard" Content="Dealer Draw" 
+                    Height="25" Width="80" Click="DrawDealerCard" 
+                    Margin="245,449,245,161" FontFamily="Baskerville Old Face"
+                    BorderThickness="0" Background="Black" Opacity="0.85"
+                    Foreground="Ivory"/>
+            <Button x:Name="FirstDealerCards" Content="Dealer Draw" 
+                    Height="25" Width="80"
                     Click="Draw3DealerCards" Margin="245,449,245,161" 
-                    IsEnabled="False"/>
-            <Button x:Name="PlayerDraw" Content="PlayerDraw"  Width="80" Height="25"
-                    Click="Button_Click" Margin="0,486,0,138"/>
+                    IsEnabled="False" BorderThickness="0" Background="Black"
+                    Foreground="Ivory" FontFamily="Baskerville Old Face" Opacity="0.85"/>
+            <Button x:Name="PlayerDraw" Content="PlayerDraw"
+                    Width="80" Height="25"
+                    Click="Button_Click" Margin="0,486,0,138"
+                    FontFamily="Baskerville Old Face" BorderThickness="0"
+                    Background="Black" Opacity="0.85" Foreground="Ivory"/>
 
 
-            <TextBlock x:Name="TestText" Margin="216,108,216,489"/>
+            <TextBlock x:Name="TestText" Margin="216,108,216,401" FontSize="5"/>
 
             <StackPanel x:Name="CardPanel" Visibility ="Visible"
-                        Orientation="Horizontal" Height="85" Margin="142,282,133,282"/>
+                        Orientation="Horizontal" Margin="142,282,133,277"/>
 
-            <StackPanel x:Name="PlayerCardPanel" Visibility="Visible" Orientation="Horizontal" Width="200" Margin="228,526,142,0"/>
+            <StackPanel x:Name="PlayerCardPanel" Visibility="Visible" 
+                        Orientation="Horizontal" Width="200" Margin="228,526,142,0"/>
 
-            <Button x:Name="NewRound" Content="New Round" HorizontalAlignment="Center" 
-                    Margin="0,411,0,0" VerticalAlignment="Top" Click="StartNewRound"
+            <Button x:Name="NewRound" Content="New Round"
+                    HorizontalAlignment="Center" Margin="0,411,0,0" 
+                    VerticalAlignment="Top" Click="StartNewRound"
                     Visibility="Collapsed"/>
 
+            <TextBox x:Name="ChipInput" Text="Bet"
+                     HorizontalAlignment="Left" Margin="452,461,0,0" 
+                     TextAlignment="Center" VerticalAlignment="Top" 
+                     Width="44" Height="16" FontFamily="Baskerville Old Face"
+                     PreviewMouseLeftButtonDown="EmptyBetText"
+                     Cursor="Hand" IsTabStop="False"
+                     PreviewTextInput="CheckForLetters"/>
 
+            <Button Content="Raise" HorizontalAlignment="Left" 
+                    Margin="422,486,0,0" VerticalAlignment="Top" 
+                    Height="20" Width="46"
+                    Click="StartCalculation"/>
 
+            <TextBox x:Name="InputCorrector" HorizontalAlignment="Left" 
+                     Margin="415,425,0,0" TextWrapping="Wrap" 
+                     VerticalAlignment="Top" Width="122" 
+                     TextAlignment="Center" FontFamily="72 Black"
+                     BorderBrush="#FFF9F6EE" Foreground="#FFB90000"
+                     AllowDrop="False" Focusable="False"
+                     Cursor="No" Background="#FFF9F6EE"/>
         </Grid>
     </Viewbox>
 </UserControl>

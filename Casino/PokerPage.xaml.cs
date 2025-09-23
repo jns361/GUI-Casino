@@ -31,6 +31,7 @@ namespace Casino
         public PokerCardSetup setcards;
         public PokerDrawLogic draw = new PokerDrawLogic();
         public PokerHandsCheck checkwin;
+        public PokerBettingLogic bet;
 
         public PokerPage(MainWindow mainWindow)
         {
@@ -39,35 +40,10 @@ namespace Casino
             checkwin = new PokerHandsCheck();
             chips = new ChipManagement(null, null);
             chipDisplay.Text = chips.chipAmount.ToString();
+            bet = new PokerBettingLogic(this);
 
         // Initialize handResult using an instance of PokerHandsCheck
             var handsCheck = new PokerHandsCheck();
-            /*
-            var hearts2 = PokerCardSetup.GetCardImage(PokerCardSetup.heart, PokerCardSetup.two);
-            var spadesK = PokerCardSetup.GetCardImage(PokerCardSetup.spades, PokerCardSetup.king);
-            var diamondsA = PokerCardSetup.GetCardImage(PokerCardSetup.diamonds, PokerCardSetup.ace);
-
-            CardPanel.Children.Add(new Image
-            {
-                Source = hearts2,
-                Width = 48,
-                Height = 68,
-                Margin = new Thickness(5)
-            });
-            CardPanel.Children.Add(new Image
-            {
-                Source = spadesK,
-                Width = 48,
-                Height = 68,
-                Margin = new Thickness(5)
-            });
-            CardPanel.Children.Add(new Image
-            {
-                Source = diamondsA,
-                Width = 48,
-                Height = 68,
-                Margin = new Thickness(5)
-            });*/
         }
 
 
@@ -152,10 +128,16 @@ namespace Casino
 
         }
 
+        public bool blockDraw = false;
+
         private async void Draw3DealerCards(object sender, RoutedEventArgs e)
         {
+            blockDraw = true;
+            FirstDealerCards.IsEnabled = false;
+            FirstDealerCards.Visibility = Visibility.Collapsed;
             for (int i = 0; i < 3; i++)
             {
+                blockBetting = false;
                 string pickedCard = draw.RandomCardDealer();
                 if (pickedCard == "Reached max amount")
                 {
@@ -190,14 +172,16 @@ namespace Casino
                 CardPanel.Children.Add(cardWithLabel);
                 await Task.Delay(320);
             }
-            FirstDealerCards.IsEnabled = false;
-            FirstDealerCards.Visibility = Visibility.Collapsed;
+            blockDraw = false;
         }
 
         bool firstClick = true;
 
         private void DrawDealerCard(object sender, RoutedEventArgs e)
         {
+            if (blockDraw) return;
+
+            blockBetting = false;
             string pickedCard = draw.RandomCardDealer();
             if (pickedCard == "Reached max amount")
             {
@@ -235,14 +219,17 @@ namespace Casino
                 TestText.TextAlignment = TextAlignment.Center;
                 TestText.Text += handResult;
                 NewRound.Visibility = Visibility.Visible;
+                bet.WinCalculation();
+                chips.SaveChips();
+                chipDisplay.Text = chips.chipAmount.ToString();
             }
             firstClick = false;
         }
 
-        
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            blockBetting = false;
             for (int i = 0; i < 2; i++)
             {
                 string pickedCard = draw.RandomCardPlayer();
@@ -301,6 +288,75 @@ namespace Casino
 
             checkwin.ResetLists();
             TestText.Text = "";
+        }
+
+        private void EmptyBetText(object sender, MouseButtonEventArgs e)
+        {
+            if (ChipInput.Text == "Bet")
+            {
+                ChipInput.Text = "";
+            }
+
+        }
+
+        private void CheckForLetters(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(char.IsDigit);
+
+            if (e.Handled)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Only numbers!";
+            }
+            else
+            {
+                InputCorrector.Visibility = Visibility.Hidden;
+                InputCorrector.Text = "";
+            }
+        }
+
+        public bool blockBetting = true;
+
+        private void StartCalculation(object sender, RoutedEventArgs e)
+        {
+            InputCorrector.Visibility = Visibility.Collapsed;
+            int.TryParse(ChipInput.Text, out int betAmount);
+
+            int checkResult = chips.chipAmount - betAmount;
+            if (checkResult < 0)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Debt isn't possible!";
+                ChipInput.Text = "";
+                return;
+            }
+
+            if (blockBetting == true)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Draw cards first!";
+                return;
+            }
+
+            if (betAmount < 10)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Minimum bet of 10 chips!";
+                return;
+            }
+
+            if (String.IsNullOrWhiteSpace(ChipInput.Text))
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "Enter something!";
+                return;
+            }
+
+            blockBetting = true;
+
+            bet.ChipCalculation(betAmount);
+            chips.SaveChips();
+
         }
     }
 }

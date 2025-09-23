@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
-using System.ComponentModel;
 namespace Casino
 {
     /// <summary>
@@ -38,12 +38,12 @@ namespace Casino
                 LoadChipGif();
             }
 
-            
+
             numberChoiceBox.Focusable = false;
             InputCorrector.Visibility = Visibility.Hidden;
         }
 
-        private void TextYour_Loaded(object sender, RoutedEventArgs e) 
+        private void TextYour_Loaded(object sender, RoutedEventArgs e)
         {
             Animations.FontAnim(textYour);
         }
@@ -64,7 +64,7 @@ namespace Casino
 
         private void SetupGame()
 
-        { 
+        {
             roulette = new GameLogicRoulette();
             chips = new ChipManagement(roulette, this);
             chipDisplay.Text = chips.chipAmount.ToString();
@@ -218,8 +218,8 @@ namespace Casino
             {
                 ColorChoice = "black";
                 ColorGame = true;
-            }          
-            
+            }
+
             if (activeRound == true)
             {
                 InputCorrector.Text = "Wait until the current round is over!";
@@ -267,8 +267,8 @@ namespace Casino
                 EasingFunction = new CircleEase { EasingMode = EasingMode.EaseOut },
             };
 
-            
-            
+
+
             WheelSpin.Completed += (s, e) =>
             {
                 GetBetType();
@@ -398,7 +398,7 @@ namespace Casino
 
         //Reset chips to the beginning by just changing savefile content
         private void ResetChips(object sender, RoutedEventArgs e)
-        { 
+        {
             //PopUp to check if user really wants to reset
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
                 "Continue?",
@@ -510,7 +510,7 @@ namespace Casino
             };
 
             RouletteGrid.BeginAnimation(UIElement.OpacityProperty, fadeOut);
-            
+
             DoubleAnimation fadeIn = new DoubleAnimation
             {
                 From = 0,
@@ -542,7 +542,7 @@ namespace Casino
                 To = 1.0,
                 Duration = TimeSpan.FromMilliseconds(250)
             };
-            
+
             if (colorChoice == "red")
             {
                 UserDisplayRed.Visibility = Visibility.Visible;
@@ -584,7 +584,7 @@ namespace Casino
             {
                 ResultDisplayRed.Visibility = Visibility.Visible;
                 ResultDisplayRed.BeginAnimation(UIElement.OpacityProperty, fadeIn);
-            } 
+            }
             else if (resultColor == "black")
             {
                 ResultDisplayBlack.Visibility = Visibility.Visible;
@@ -602,7 +602,7 @@ namespace Casino
             }
             else
             {
-                ResultDisplay.BorderBrush = (Brush?)new BrushConverter().ConvertFromString("#c90404") ?? Brushes.Red;                               
+                ResultDisplay.BorderBrush = (Brush?)new BrushConverter().ConvertFromString("#c90404") ?? Brushes.Red;
             }
         }
     }

@@ -97,6 +97,7 @@ namespace Casino
         public List<int> assignedValueNums = new List<int>();
         public List<int> assignedValsNoDupes = new List<int>();
 
+        public string handResult = "";
         public string HandWinCheck()
         {
             ComparePreparation();
@@ -143,7 +144,7 @@ namespace Casino
 
             bool straightCheck = StraightCheck();
 
-            string handResult = "";
+            
 
             var triples = valueCount.Where(kv => kv.Value == 3).Select(kv => kv.Key).ToList();
             var pairs = valueCount.Where(kv => kv.Value == 2).Select(kv => kv.Key).ToList();
@@ -186,12 +187,6 @@ namespace Casino
             if (royalFlush)
             {
                 handResult = "RoyalFlush";
-                return handResult;
-            }
-
-            else if (suitCount.Values.Any(count => count >= 5) && straightCheck == true)
-            {
-                handResult = "StraightFlush";
                 return handResult;
             }
 
