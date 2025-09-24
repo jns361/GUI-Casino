@@ -9,23 +9,31 @@ namespace Casino
         public RoulettePage ui;
         public int chipAmount;// = 100;
 
+
+
         //Set \Appdata\Roaming\Roulette path for savefile txt
         private readonly string saveDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "Roulette",
             "Savefile"
         );
+        // Remove the duplicate and problematic field declaration
+        // Replace:
+        // public readonly string savePath = Path.Combine(path1: basePath, "Savefile.txt");
 
-        public readonly string savePath;
+        // With a constructor assignment for savePath
+        public readonly string basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Casino", "Savefile");
+        public string savePath;
 
         public ChipManagement(GameLogicRoulette game, RoulettePage ui)
         {
             this.roulette = roulette;
             this.ui = ui;
 
-            savePath = Path.Combine(saveDirectory, "Savefile.txt");
+            
 
             LoadChips();
+
         }
 
         //set amount after bet + amount after win
@@ -69,19 +77,15 @@ namespace Casino
             }
         }
 
-        
 
         public void SaveChips()
         {
+            savePath = Path.Combine(basePath, "Savefile.txt");
             try
             {
-                //Create folder, if not existing already
-                Directory.CreateDirectory(saveDirectory);
+                // Korrekt: nur den Ordner erstellen
+                Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
-                //Set path to file
-                //string filePath = Path.Combine(savePath, "Savefile.txt");
-
-                //Open, write and close
                 using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
                 {
                     sw.Write(chipAmount);
@@ -94,7 +98,7 @@ namespace Casino
             }
             finally
             {
-                Console.WriteLine("SaveChips() finished");
+                Console.WriteLine("SaveChips() finished for a chipAmount of " + chipAmount);
             }
         }
 

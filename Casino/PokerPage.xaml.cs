@@ -39,18 +39,35 @@ namespace Casino
             main = mainWindow;
             checkwin = new PokerHandsCheck();
             chips = new ChipManagement(null, null);
+            chips.LoadChips();
             chipDisplay.Text = chips.chipAmount.ToString();
+            Console.WriteLine($"ChipDisplay set to {chips.chipAmount}");
             bet = new PokerBettingLogic(this);
+            bet.betAmount = 0;
+            LoadChipGif();
 
         // Initialize handResult using an instance of PokerHandsCheck
             var handsCheck = new PokerHandsCheck();
         }
 
+        private void LoadChipGif()
+        {
+            var imageUri = new Uri("pack://application:,,,/Casino;component/Visuals/chip.gif", UriKind.Absolute);
+            var image = new BitmapImage(imageUri);
+
+            ImageBehavior.SetAnimatedSource(chipAnimation, image);
+            ImageBehavior.SetRepeatBehavior(chipAnimation, System.Windows.Media.Animation.RepeatBehavior.Forever);
+            ImageBehavior.SetAnimationSpeedRatio(chipAnimation, 1.5);
+        }
 
         // Replace this line:
         // public string handResult = PokerHandsCheck.HandWinCheck();
 
         // With the following code to fix CS0120:
+
+        //For force bet after the player hand draw 
+        public bool firstRound = true;
+        public bool betDone;
 
         private void HomeMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -85,7 +102,10 @@ namespace Casino
 
         private void ResetGame(object sender, RoutedEventArgs e)
         {
+            betCount = 0;
+            bet.betAmount = 0;
             //PopUp to check if user really wants to reset
+            chips.SaveChips();
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
                 "Continue?",
                 MessageBoxButton.YesNo);
@@ -97,11 +117,15 @@ namespace Casino
                 {
                     sw.Write("1000");
                 }
-                chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
-
+                chips.SaveChips();
+                chips.LoadChips();
+                chipDisplay.Text = chips.chipAmount.ToString();
+                Console.WriteLine("Updated chipDisplay to current chipAmount!");
                 PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
-                
+
+                bet.betAmount = 0;
+
                 PokerDrawLogic.ResetLists();
                 CardPanel.Children.Clear();
                 PlayerCardPanel.Children.Clear();
@@ -129,9 +153,17 @@ namespace Casino
         }
 
         public bool blockDraw = false;
-
+        public bool firstBetDone = false;
         private async void Draw3DealerCards(object sender, RoutedEventArgs e)
         {
+            if (firstBetDone == false)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "You have to bet at least 50 chips after getting your cards!";
+                return;
+            }
+            ChipInput.IsEnabled = true;
+            RaiseBet.IsEnabled = true;
             blockDraw = true;
             FirstDealerCards.IsEnabled = false;
             FirstDealerCards.Visibility = Visibility.Collapsed;
@@ -179,6 +211,8 @@ namespace Casino
 
         private void DrawDealerCard(object sender, RoutedEventArgs e)
         {
+            ChipInput.IsEnabled = true;
+            RaiseBet.IsEnabled = true;
             if (blockDraw) return;
 
             blockBetting = false;
@@ -219,16 +253,20 @@ namespace Casino
                 TestText.TextAlignment = TextAlignment.Center;
                 TestText.Text += handResult;
                 NewRound.Visibility = Visibility.Visible;
-                bet.WinCalculation();
-                chips.SaveChips();
-                chipDisplay.Text = chips.chipAmount.ToString();
+                bet.WinCalculation(handResult);
             }
             firstClick = false;
         }
 
+        
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            betDone = false;
+            //checkedBet = false;
+
+            ChipInput.IsEnabled = true;
+            RaiseBet.IsEnabled = true;
             blockBetting = false;
             for (int i = 0; i < 2; i++)
             {
@@ -268,6 +306,9 @@ namespace Casino
 
         private void StartNewRound(object sender, RoutedEventArgs e)
         {
+            betCount = 0;
+            bet.betAmount = 0;
+            betDone = false;
             PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
             NewRound.Visibility = Visibility.Collapsed;
             string chipSavePath = chips.savePath;
@@ -315,48 +356,79 @@ namespace Casino
             }
         }
 
+        //Make sure to draw cards before betting
         public bool blockBetting = true;
+        public int intBetAmount;
+        public int betCount = 0; 
 
         private void StartCalculation(object sender, RoutedEventArgs e)
         {
+            chips.LoadChips();
+            betDone = true;
             InputCorrector.Visibility = Visibility.Collapsed;
-            int.TryParse(ChipInput.Text, out int betAmount);
 
-            int checkResult = chips.chipAmount - betAmount;
-            if (checkResult < 0)
+
+            //Check if the player entered something
+            if (string.IsNullOrWhiteSpace(ChipInput.Text) || !int.TryParse(ChipInput.Text, out int betAmount))
             {
                 InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = "Debt isn't possible!";
-                ChipInput.Text = "";
+                InputCorrector.Text = "Enter a valid number!";               
                 return;
             }
+            intBetAmount = int.Parse(ChipInput.Text);
+            int checkResult = chips.chipAmount - intBetAmount - (int)bet.betAmount;
+            Console.WriteLine($"chipAmount: {chips.chipAmount}");
+            Console.WriteLine($"betAmount: {intBetAmount}");
+            Console.WriteLine($"checkResult: {checkResult}");
+            Console.WriteLine($"blockBetting: {blockBetting}");
 
-            if (blockBetting == true)
+            //Check if player tries to bet before cards were drawn
+            if (blockBetting)
             {
                 InputCorrector.Visibility = Visibility.Visible;
                 InputCorrector.Text = "Draw cards first!";
                 return;
             }
 
-            if (betAmount < 10)
+            //Dont bet below minimum bet
+            if (intBetAmount < 50)
             {
                 InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = "Minimum bet of 10 chips!";
+                InputCorrector.Text = "Minimum bet of 50 chips!";
                 return;
             }
 
-            if (String.IsNullOrWhiteSpace(ChipInput.Text))
+            //Check if the player has enough chips for his bet
+            if (checkResult < 0)
             {
                 InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = "Enter something!";
+                InputCorrector.Text = "Can't bet that much!";
+                ChipInput.Text = "";
                 return;
             }
 
+            if (betCount >= 2)
+            {
+                InputCorrector.Visibility = Visibility.Visible;
+                InputCorrector.Text = "You can only bet 2 times!";
+                return;
+            }
+
+            if (blockBetting == false)
+            {
+                betCount++;
+            }
+
+            if (betCount == 1)
+            {
+                firstBetDone = true;
+            }
+
+            
+
+            Console.WriteLine("intBetAmount = " + intBetAmount);
             blockBetting = true;
-
-            bet.ChipCalculation(betAmount);
-            chips.SaveChips();
-
+            bet.ChipCalculation(intBetAmount);
         }
     }
 }

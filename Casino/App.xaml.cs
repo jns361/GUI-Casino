@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RouletteNew
+namespace Casino
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"

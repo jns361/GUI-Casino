@@ -196,10 +196,10 @@ namespace Casino
 
             //Forbid to go below 0
             int checkResult = chips.chipAmount - chipFundsUsed;
-            if (checkResult < 0)
+            if (checkResult < 10)
             {
                 InputCorrector.Visibility = Visibility.Visible;
-                InputCorrector.Text = "You can't go below 0!";
+                InputCorrector.Text = "You can't go below the minimum bet of 10!";
                 BetAmountInput.Text = "";
                 return;
             }
@@ -249,6 +249,7 @@ namespace Casino
             DisplayUserColors(ColorChoice);
 
             ResultDisplayRed.Visibility = Visibility.Hidden;
+            ResultDisplayGreen.Visibility = Visibility.Hidden;
             ResultDisplayGreen.Visibility = Visibility.Hidden;
             ResultDisplayBlack.Visibility = Visibility.Hidden;
 
@@ -604,6 +605,11 @@ namespace Casino
             {
                 ResultDisplay.BorderBrush = (Brush?)new BrushConverter().ConvertFromString("#c90404") ?? Brushes.Red;
             }
+        }
+
+        private void chipDisplay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

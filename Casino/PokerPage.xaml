@@ -89,18 +89,20 @@
                      Cursor="Hand" IsTabStop="False"
                      PreviewTextInput="CheckForLetters"/>
 
-            <Button Content="Raise" HorizontalAlignment="Left" 
-                    Margin="422,486,0,0" VerticalAlignment="Top" 
+            <Button x:Name="RaiseBet" Content="Raise" 
+                    HorizontalAlignment="Left" Margin="451,488,0,0" 
+                    VerticalAlignment="Top" 
                     Height="20" Width="46"
                     Click="StartCalculation"/>
 
             <TextBox x:Name="InputCorrector" HorizontalAlignment="Left" 
-                     Margin="415,425,0,0" TextWrapping="Wrap" 
+                     Margin="415,396,0,0" TextWrapping="Wrap" 
                      VerticalAlignment="Top" Width="122" 
                      TextAlignment="Center" FontFamily="72 Black"
-                     BorderBrush="#FFF9F6EE" Foreground="#FFB90000"
-                     AllowDrop="False" Focusable="False"
-                     Cursor="No" Background="#FFF9F6EE"/>
+                     Foreground="#FFB90000" AllowDrop="False" 
+                     Focusable="False" Background="#FFF9F6EE" 
+                     BorderThickness="0"/>
+            
         </Grid>
     </Viewbox>
 </UserControl>

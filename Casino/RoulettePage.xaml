@@ -60,7 +60,7 @@
                      FontSize="17"
                      BorderThickness="0"
                      IsReadOnly="True" Focusable="False" Background="#FFF9F6EE"
-                     RenderTransformOrigin="0.527,0.293" Height="23"/>
+                     RenderTransformOrigin="0.527,0.293" Height="23" TextChanged="chipDisplay_TextChanged"/>
 
             <Canvas VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="270" Margin="0,379,0,0">
 
@@ -134,12 +134,12 @@
                      Text="" 
                      TextAlignment="Center" 
                      Width="226"
-                     FontFamily="72 Black" 
-                     BorderBrush="#FFF9F6EE" 
+                     FontFamily="72 Black"  
                      Foreground="#FFB90000" 
                      AllowDrop="False" 
                      Focusable="False" 
-                     Cursor="No"  Background="#FFF9F6EE"/>
+                     Cursor="No"  Background="#FFF9F6EE"
+                     BorderThickness="0"/>
 
             <TextBox x:Name="BetAmountInput" 
                      Text="BET" TextAlignment="Center"
