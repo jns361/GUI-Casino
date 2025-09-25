@@ -69,7 +69,7 @@ namespace Casino
         public bool firstRound = true;
         public bool betDone;
 
-        private void HomeMenu_Click(object sender, RoutedEventArgs e)
+        public void HomeMenu()
         {
             main.ChipRain.Visibility = Visibility.Visible;
             main.ChipRain.Opacity = 0;
@@ -98,58 +98,62 @@ namespace Casino
             //Debug.WriteLine("Starting fadeIn mainmenu");
             main.ChipRain.BeginAnimation(UIElement.OpacityProperty, fadeIn);
             //Debug.WriteLine("Ended transition to main menu; ");
-            }
+        }
+
+        private void HomeMenu_Click(object sender, RoutedEventArgs e)
+        {
+            HomeMenu();
+        }
 
         private void ResetGame(object sender, RoutedEventArgs e)
         {
             betCount = 0;
             bet.betAmount = 0;
             //PopUp to check if user really wants to reset
-            chips.SaveChips();
+            //chips.SaveChips();
             MessageBoxResult result = MessageBox.Show("Are you sure? Continuing will reset your chips back to 1000!",
                 "Continue?",
                 MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                string chipSavePath = chips.savePath;
-                Console.WriteLine(chipSavePath);
-                using (StreamWriter sw = new StreamWriter(chipSavePath, false, Encoding.ASCII))
-                {
-                    sw.Write("1000");
-                }
-                chips.chipAmount = 1000;
-                chips.SaveChips();
-                chips.LoadChips();
-                chipDisplay.Text = chips.chipAmount.ToString();
-                Console.WriteLine("Updated chipDisplay to current chipAmount!");
-                PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
-
-                bet.betAmount = 0;
-
-                PokerDrawLogic.ResetLists();
-                CardPanel.Children.Clear();
-                PlayerCardPanel.Children.Clear();
-
-                FirstDealerCards.IsEnabled = true;
-                FirstDealerCards.Visibility = Visibility.Visible;
-                NewDealerCard.IsEnabled = true;
-                PlayerDraw.IsEnabled = true;
-                draw.pickedCard = "";
-
-                checkwin.ResetLists();
-                TestText.Text = "";
-                
-                Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
-                    $" backend amount: {chips.chipAmount}");
-                MessageBox.Show("Reset successful!", "Reset successful!");
+                ResetGame();
             }
 
             else
             {
                 MessageBox.Show("Reset cancelled!", "Reset cancelled!");
             }
+        }
 
+        public void ResetGame()
+        {
+            chips.chipAmount = 1000;
+            chips.SaveChips();  // Let ChipManagement handle the save
+            chips.LoadChips();
+            chipDisplay.Text = chips.chipAmount.ToString();
+            Console.WriteLine("Updated chipDisplay to current chipAmount!");
+            PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
 
+            bet.betAmount = 0;
+
+            blockBetting = true;
+
+            PokerDrawLogic.ResetLists();
+            CardPanel.Children.Clear();
+            PlayerCardPanel.Children.Clear();
+
+            FirstDealerCards.IsEnabled = true;
+            FirstDealerCards.Visibility = Visibility.Visible;
+            NewDealerCard.IsEnabled = true;
+            PlayerDraw.IsEnabled = true;
+            draw.pickedCard = "";
+
+            checkwin.ResetLists();
+            WinAnnounce.Text = "";
+
+            Console.WriteLine($"Reset successful! Chips are: displayed: {chipDisplay};" +
+                $" backend amount: {chips.chipAmount}");
+            MessageBox.Show("Reset successful!", "Reset successful!");
         }
 
         public bool blockDraw = false;
@@ -207,7 +211,7 @@ namespace Casino
             blockDraw = false;
         }
 
-        bool firstClick = true;
+        public bool firstClick = true;
 
         private void DrawDealerCard(object sender, RoutedEventArgs e)
         {
@@ -250,8 +254,6 @@ namespace Casino
             if (firstClick == false)
             {
                 string handResult = checkwin.HandWinCheck();
-                TestText.TextAlignment = TextAlignment.Center;
-                TestText.Text += handResult;
                 NewRound.Visibility = Visibility.Visible;
                 bet.WinCalculation(handResult);
             }
@@ -304,7 +306,7 @@ namespace Casino
             PlayerDraw.IsEnabled = false;
         }
 
-        private void StartNewRound(object sender, RoutedEventArgs e)
+        public void StartNewRound()
         {
             betCount = 0;
             bet.betAmount = 0;
@@ -328,7 +330,12 @@ namespace Casino
             firstClick = true;
 
             checkwin.ResetLists();
-            TestText.Text = "";
+            WinAnnounce.Text = "";
+        }
+
+        public void StartNewRound(object sender, RoutedEventArgs e)
+        {
+            StartNewRound();
         }
 
         private void EmptyBetText(object sender, MouseButtonEventArgs e)
@@ -376,7 +383,7 @@ namespace Casino
                 return;
             }
             intBetAmount = int.Parse(ChipInput.Text);
-            int checkResult = chips.chipAmount - intBetAmount - (int)bet.betAmount;
+            int checkResult = chips.chipAmount - intBetAmount;
             Console.WriteLine($"chipAmount: {chips.chipAmount}");
             Console.WriteLine($"betAmount: {intBetAmount}");
             Console.WriteLine($"checkResult: {checkResult}");
@@ -424,11 +431,20 @@ namespace Casino
                 firstBetDone = true;
             }
 
-            
+            chips.LoadChips();
+            Console.WriteLine("chipAmount after checking for valid input: " + chips.chipAmount);
 
             Console.WriteLine("intBetAmount = " + intBetAmount);
             blockBetting = true;
             bet.ChipCalculation(intBetAmount);
+        }
+
+        private void ShowHelp(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("All Pokerhands with wins:" + "\n" + "Highcard; Win = Bet * 0,5" + "\n" + "Pair; Win = Bet * 0,85" + "\n" +
+                "TwoPair; Win = Bet * 1,5" + "\n" + "Three Of A Kind; Win = Bet * 2" + "\n" + "Straight; Win = Bet * 2,5" + "\n" + "Flush; Win = Bet * 3,0" + "\n"
+                + "FullHouse; Win = Bet * 3,6" + "\n" + "Four Of A Kind; Win = Bet * 4,2" + "\n" + "Straight Flush; Win = Bet * 5,3" + "\n" + "Royal Flush; Win = Bet * 7" + "\n",
+                "Help");
         }
     }
 }

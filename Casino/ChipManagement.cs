@@ -22,18 +22,15 @@ namespace Casino
         // public readonly string savePath = Path.Combine(path1: basePath, "Savefile.txt");
 
         // With a constructor assignment for savePath
-        public readonly string basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Casino", "Savefile");
+        public string basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Casino", "Savefile");
         public string savePath;
 
         public ChipManagement(GameLogicRoulette game, RoulettePage ui)
         {
             this.roulette = roulette;
             this.ui = ui;
-
-            
-
+            savePath = Path.Combine(basePath, "Savefile.txt");
             LoadChips();
-
         }
 
         //set amount after bet + amount after win
@@ -108,16 +105,16 @@ namespace Casino
         {
             try
             {
-                ;
+                savePath = Path.Combine(basePath, "Savefile.txt");
                 if (File.Exists(savePath))
                 {
                     string content = File.ReadAllText(savePath);
                     chipAmount = int.Parse(content);
                 }
-                else
+                /*else
                 {
                     chipAmount = 1000;
-                }
+                }*/
             }
             catch (Exception e)
             {

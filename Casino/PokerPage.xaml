@@ -68,7 +68,10 @@
                     Background="Black" Opacity="0.85" Foreground="Ivory"/>
 
 
-            <TextBlock x:Name="TestText" Margin="216,108,216,401" FontSize="5"/>
+            <TextBox Name="WinAnnounce" Margin="210,100,210,397" 
+                     FontSize="14" FontFamily="Baskerville Old Face"
+                     Background="#FFF9F6EE" BorderThickness="0"
+                     IsReadOnly="True" Cursor="Arrow"/>
 
             <StackPanel x:Name="CardPanel" Visibility ="Visible"
                         Orientation="Horizontal" Margin="142,282,133,277"/>
@@ -102,7 +105,17 @@
                      Foreground="#FFB90000" AllowDrop="False" 
                      Focusable="False" Background="#FFF9F6EE" 
                      BorderThickness="0"/>
-            
+
+            <Button x:Name="HelpButton" Content="?" HorizontalAlignment="Left" 
+                    Margin="508,36,0,0" VerticalAlignment="Top"
+                    Width="20" Height="20" Click="ShowHelp"/>
+
+            <TextBox Name="TotalBetDisplay" Margin="399,526,21,87" 
+                     FontSize="14" FontFamily="Baskerville Old Face"
+                     Background="#FFF9F6EE" BorderThickness="0"
+                     IsReadOnly="True" Cursor="Arrow"
+                     TextAlignment="Center"/>
+
         </Grid>
     </Viewbox>
 </UserControl>

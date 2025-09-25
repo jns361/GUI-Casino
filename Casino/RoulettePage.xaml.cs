@@ -178,6 +178,7 @@ namespace Casino
         public bool activeRound = false;
         private void Button_Click(object sender, RoutedEventArgs e) //SUBMIT button
         {
+            chips.LoadChips();
             ResultDisplay.BorderBrush = Brushes.Black;
             if (BetAmountInput.Text == "BET")
             {
@@ -408,14 +409,11 @@ namespace Casino
             //If confirmed, reset chips to 1000, reset all animations (like hover effect) to normal
             if (result == MessageBoxResult.Yes)
             {
-                string savePath = chips.savePath;
-                Console.WriteLine(savePath);
-                using (StreamWriter sw = new StreamWriter(savePath, false, Encoding.ASCII))
-                {
-                    sw.Write("1000");
-                }
-                chipDisplay.Text = "1000";
                 chips.chipAmount = 1000;
+                chips.SaveChips();  // Let ChipManagement handle the save
+                chips.LoadChips();
+                chipDisplay.Text = chips.chipAmount.ToString();
+                Console.WriteLine("Updated chipDisplay to current chipAmount!");
 
                 BetAmountInput.Text = "BET";
                 chipFundsUsed = 0;

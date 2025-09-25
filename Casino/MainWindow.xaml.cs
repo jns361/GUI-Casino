@@ -17,7 +17,8 @@ namespace Casino
         public int playerBetAmount;
         public MainWindow main;
         public PokerPage pkp;
-        
+        public ChipManagement chips;
+
 
         public MainWindow()
         {
@@ -25,7 +26,8 @@ namespace Casino
             ChipRain.Loaded += ChipRain_Loaded;
 
             rlp = new RoulettePage(this);
-            
+            chips = new ChipManagement(null, null);
+
             rlp.Visibility = Visibility.Hidden;
 
             pkp = new PokerPage(this);
@@ -45,14 +47,9 @@ namespace Casino
         }
 
         private void RouletteButton_Click(object sender, RoutedEventArgs e)
-        { 
-            /*if (rlp == null)
-            {
-                rlp = new RoulettePage(this);
-                rlp.Visibility = Visibility.Hidden;
-                MainGrid.Children.Add(rlp);
-            }*/
-
+        {
+            chips.LoadChips();
+            rlp.chipDisplay.Text = chips.chipAmount.ToString();
             // RoulettePage selbst sichtbar
             rlp.Visibility = Visibility.Visible;
             rlp.RouletteGrid.Visibility = Visibility.Visible;
@@ -82,6 +79,9 @@ namespace Casino
 
         private void PokerButton_Click(object sender, RoutedEventArgs e)
         {
+            pkp.StartNewRound();
+            chips.LoadChips();
+            pkp.chipDisplay.Text = chips.chipAmount.ToString();
             pkp.Visibility = Visibility.Visible;
             pkp.PokerGrid.Visibility = Visibility.Visible;
             pkp.PokerGrid.Opacity = 0;
