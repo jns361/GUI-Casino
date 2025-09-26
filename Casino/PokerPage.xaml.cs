@@ -135,14 +135,14 @@ namespace Casino
             PokerDrawLogic.allCards = new List<string>(PokerDrawLogic.originalDeck);
 
             bet.betAmount = 0;
-
+            bet.betInTotal = 0;
             blockBetting = true;
 
             PokerDrawLogic.ResetLists();
             CardPanel.Children.Clear();
             PlayerCardPanel.Children.Clear();
 
-            FirstDealerCards.IsEnabled = true;
+            FirstDealerCards.IsEnabled = false;
             FirstDealerCards.Visibility = Visibility.Visible;
             NewDealerCard.IsEnabled = true;
             PlayerDraw.IsEnabled = true;
@@ -327,7 +327,10 @@ namespace Casino
             PlayerDraw.IsEnabled = true;
             draw.pickedCard = "";
 
+            bet.betInTotal = 0;
+
             firstClick = true;
+            blockBetting = true;
 
             checkwin.ResetLists();
             WinAnnounce.Text = "";
@@ -441,7 +444,7 @@ namespace Casino
 
         private void ShowHelp(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("All Pokerhands with wins:" + "\n" + "Highcard; Win = Bet * 0,5" + "\n" + "Pair; Win = Bet * 0,85" + "\n" +
+            MessageBox.Show("All Pokerhands with wins:" + "\n" + "\n"+ "Highcard; Win = Bet * 0,5" + "\n" + "Pair; Win = Bet * 0,85" + "\n" +
                 "TwoPair; Win = Bet * 1,5" + "\n" + "Three Of A Kind; Win = Bet * 2" + "\n" + "Straight; Win = Bet * 2,5" + "\n" + "Flush; Win = Bet * 3,0" + "\n"
                 + "FullHouse; Win = Bet * 3,6" + "\n" + "Four Of A Kind; Win = Bet * 4,2" + "\n" + "Straight Flush; Win = Bet * 5,3" + "\n" + "Royal Flush; Win = Bet * 7" + "\n",
                 "Help");
